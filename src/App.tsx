@@ -1,12 +1,12 @@
-import "./App.css";
-import Game from "./Game";
+import GameContainer from "./Components/GameContainer";
+import TopBar from "./Components/TopBar";
 
 function App() {
 	return (
-		<div className="App">
-			<Game word="peanuts" validWords={"dictionary"} />
+		<div>
+			<TopBar />
+			<GameContainer />;
 		</div>
 	);
 }
-
 export default App;

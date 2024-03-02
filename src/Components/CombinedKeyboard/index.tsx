@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
+import styled from "styled-components";
 
 type Props = {
 	disabled?: boolean;
@@ -8,6 +9,10 @@ type Props = {
 	handleLetter: (letter: string) => void;
 	handleEnter: () => void;
 };
+
+// const StyledKeyboardContainer = styled.div`
+
+// `
 
 const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, handleEnter }: Props) => {
 	// const keyboard = useRef<SimpleKeyboard>();
@@ -25,7 +30,7 @@ const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, han
 				return;
 			}
 			if ("abcdefghijklmnopqrstuvwxyz".indexOf(e.key.toLowerCase()) !== -1) {
-				!disabled && handleLetter(e.key);
+				!disabled && handleLetter(e.key.toLowerCase());
 				return;
 			}
 
@@ -54,7 +59,7 @@ const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, han
 					handleBackspace();
 					return;
 				default:
-					handleLetter(button);
+					handleLetter(button.toLowerCase());
 			}
 		},
 		[disabled, handleBackspace, handleEnter, handleLetter],
