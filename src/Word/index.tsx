@@ -1,4 +1,3 @@
-import React from "react";
 import Letter from "../Letter";
 import styled from "styled-components";
 
@@ -15,7 +14,7 @@ const Word = ({ target, current, complete }: Props) => {
 	return (
 		<StyledWord>
 			{[...current].map((letter, index) => (
-				<Letter key={index} guess={letter} actual={current[index]} />
+				<Letter key={index} guess={letter} actual={target[index]} complete={complete} targetWord={target} />
 			))}
 		</StyledWord>
 	);

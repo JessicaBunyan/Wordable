@@ -1,10 +1,11 @@
-import React, { MutableRefObject, useCallback, useRef, useState } from "react";
-import Keyboard from "react-simple-keyboard";
+import React, { useCallback, useMemo, useState } from "react";
 import "react-simple-keyboard/build/css/index.css";
-import Word from "../Word";
 import styled from "styled-components";
+import CombinedKeyboard from "../CombinedKeyboard";
+import Word from "../Word";
+import englishDictionary from "../englishDictionary";
 
-type Props = { word: string; maxGuesses?: number };
+type Props = { word: string; maxGuesses?: number; validWords: string[] | "dictionary" | null };
 
 const StyledWordRacks = styled.div`
 	display: flex;
@@ -13,31 +14,47 @@ const StyledWordRacks = styled.div`
 	height: 20rem;
 `;
 
-const Game = ({ word, maxGuesses = 5 }: Props) => {
-	const keyboardLayout = { default: ["q w e r t y u i o p", "a s d f g h j k l", "z x c v b n m {bksp} {enter}"] };
+const Game = ({ word, maxGuesses = 5, validWords = "dictionary" }: Props) => {
+	const wordSet = useMemo(() => {
+		switch (validWords) {
+			case "dictionary":
+				return new Set(englishDictionary);
+			case null:
+				return null;
+			default:
+				return new Set(validWords);
+		}
+	}, [validWords]);
 
-	const [gameState, setGameState] = useState<"WIN" | "LOSS" | "">("");
 	const [currentGuess, setCurrentGuess] = useState("");
+	const [gameState, setGameState] = useState<"WIN" | "LOSS" | "">("");
 	const [prevGuesses, setPrevGuesses] = useState<Array<string>>([]);
-	const keyboard = useRef<any>();
 
-	const onKeyPress = useCallback(
-		(button: string, event?: MouseEvent) => {
-			if (gameState || currentGuess === "") {
-				return;
-			}
-			if (button === "{enter}") {
-				setPrevGuesses([currentGuess, ...prevGuesses]);
-				setCurrentGuess("");
-				console.log(keyboard.current.clearInput());
-				if (currentGuess === word) {
-					setGameState("WIN");
-				} else if (prevGuesses.length >= maxGuesses) {
-					setGameState("LOSS");
-				}
-			}
+	const trySubmit = useCallback(() => {
+		if (wordSet && !wordSet.has(currentGuess)) {
+			console.log("word not valid");
+			return;
+		}
+
+		setPrevGuesses([currentGuess, ...prevGuesses]);
+		setCurrentGuess("");
+		if (currentGuess === word) {
+			setGameState("WIN");
+		} else if (prevGuesses.length >= maxGuesses) {
+			setGameState("LOSS");
+		}
+	}, [setPrevGuesses, setCurrentGuess, setGameState, word, maxGuesses, wordSet, currentGuess, prevGuesses]);
+
+	const handleBackspace = useCallback(() => {
+		const updated = currentGuess.substring(0, currentGuess.length - 1);
+		setCurrentGuess(updated);
+	}, [currentGuess, setCurrentGuess]);
+
+	const handleLetter = useCallback(
+		(letter: string) => {
+			setCurrentGuess(currentGuess + letter);
 		},
-		[currentGuess, word, prevGuesses, gameState],
+		[currentGuess, setCurrentGuess],
 	);
 
 	return (
@@ -50,12 +67,11 @@ const Game = ({ word, maxGuesses = 5 }: Props) => {
 				))}
 			</StyledWordRacks>
 
-			<Keyboard
-				keyboardRef={(r) => (keyboard.current = r)}
-				layout={keyboardLayout}
-				onChange={setCurrentGuess}
-				onKeyPress={onKeyPress}
-				maxLength={15}
+			<CombinedKeyboard
+				disabled={gameState !== ""}
+				handleEnter={trySubmit}
+				handleBackspace={handleBackspace}
+				handleLetter={handleLetter}
 			/>
 		</div>
 	);
