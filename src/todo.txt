@@ -1,12 +1,9 @@
 can enter more characters than the known correct amount but they don't show. weird stuff happens if you submit these
 
-don't allow repeat submissions
 spellcheck ? 
-message why your submission isn't allowed
 
 mobile experience
 
 general styling
-cleanup interface for use with different wordlists etc
-get hosted
+cleanup code interface for use with different wordlists etc
 get onto website
