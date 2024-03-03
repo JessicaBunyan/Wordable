@@ -1,0 +1,8 @@
+can enter more characters than the known correct amount but they don't show
+
+mobile experience
+
+general styling
+cleanup interface for use with different wordlists etc
+get hosted
+get onto website

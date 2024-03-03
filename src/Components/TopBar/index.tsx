@@ -13,7 +13,7 @@ const StyledNav = styled.nav`
 	div,
 	h1,
 	ul {
-		flex-basis: 20%;
+		flex-basis: 80px;
 		font-weight: bold;
 		padding: 0;
 		font-size: 2rem;

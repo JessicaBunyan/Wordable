@@ -132,8 +132,10 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 							<span style={{ textTransform: "capitalize" }}>{word}!</span> Better luck next time..
 						</>
 					)
-				) : (
+				) : knownMaxLength === 15 ? (
 					"Enter a pokemon... (1st gen)"
+				) : (
+					<>It has {knownMaxLength} letters!</>
 				)}
 			</StyledInstruction>
 
