@@ -7,6 +7,8 @@ import winAnimation from "../../utils/winAnimation";
 import CombinedKeyboard from "../CombinedKeyboard";
 import Word from "../Word";
 
+import toast from "react-hot-toast";
+
 export const MAX_ANSWER_LENGTH = 15;
 
 type Props = { word: string; maxGuesses?: number; validWords: string[] | "dictionary" | null };
@@ -53,13 +55,17 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 			}
 		}
 		if (newLatest) {
-			setKnownMinLength(newLatest);
+			setKnownMinLength(newLatest + 1);
 		}
 	}, [currentGuess, setKnownMinLength, word, knownMinLength]);
 
 	const trySubmit = useCallback(() => {
 		if (wordSet && !wordSet.has(currentGuess)) {
-			console.log("word not valid");
+			toast.error("Only valid pokemon names are allowed");
+			return;
+		}
+		if (prevGuesses.indexOf(currentGuess) !== -1) {
+			toast.error("Already guessed that!");
 			return;
 		}
 
@@ -93,9 +99,11 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 
 	const handleLetter = useCallback(
 		(letter: string) => {
-			setCurrentGuess(currentGuess + letter);
+			if (currentGuess.length < knownMaxLength) {
+				setCurrentGuess(currentGuess + letter);
+			}
 		},
-		[currentGuess, setCurrentGuess],
+		[currentGuess, setCurrentGuess, knownMaxLength],
 	);
 
 	return (

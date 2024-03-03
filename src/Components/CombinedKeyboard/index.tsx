@@ -18,8 +18,6 @@ const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, han
 
 	const handlePhysicalKeyUp = useCallback(
 		(e: KeyboardEvent) => {
-			console.log(e.code);
-			console.log(e.key);
 			if (e.code === "Backspace") {
 				!disabled && handleBackspace();
 				return;

@@ -1,4 +1,8 @@
-can enter more characters than the known correct amount but they don't show
+can enter more characters than the known correct amount but they don't show. weird stuff happens if you submit these
+
+don't allow repeat submissions
+spellcheck ? 
+message why your submission isn't allowed
 
 mobile experience
 

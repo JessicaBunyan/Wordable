@@ -1,9 +1,8 @@
-import { useState } from "react";
-import Game from "../Game";
-import pokemon from "../../GameFiles/pokemon";
-import randInt from "../../utils/randInt";
-import randElement from "../../utils/randElement";
+import { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
+import pokemon from "../../GameFiles/pokemon";
+import randElement from "../../utils/randElement";
+import Game from "../Game";
 
 const StyledButton = styled.button`
 	padding: 1rem;
@@ -13,15 +12,22 @@ const StyledButton = styled.button`
 `;
 
 function GameContainer() {
-	console.log(pokemon);
-	console.log(randInt(0, pokemon.length - 1));
 	const [target, setTarget] = useState(randElement(pokemon));
 	const validWords = pokemon;
+	const button = useRef<HTMLButtonElement>(null);
+
+	const onReset = useCallback(() => {
+		setTarget(randElement(pokemon));
+		button.current?.blur();
+	}, [button, setTarget]);
+
 	console.log(target);
 	return (
 		<div>
 			<div className="game-container">{target && <Game key={target} word={target} validWords={validWords} />}</div>
-			<StyledButton onClick={() => setTarget(randElement(pokemon))}>Reset / New Game</StyledButton>
+			<StyledButton ref={button} onClick={onReset}>
+				Reset / New Game
+			</StyledButton>
 		</div>
 	);
 }
