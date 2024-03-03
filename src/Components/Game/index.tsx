@@ -6,12 +6,14 @@ import englishDictionary from "../../GameFiles/englishDictionary";
 import winAnimation from "../../utils/winAnimation";
 import CombinedKeyboard from "../CombinedKeyboard";
 import Word from "../Word";
+import Fuse from "fuse.js";
 
 import toast from "react-hot-toast";
+import capitaliseWord from "../../utils/capitaliseWord";
 
-export const MAX_ANSWER_LENGTH = 15;
+export const MAX_ANSWER_LENGTH = 10;
 
-type Props = { word: string; maxGuesses?: number; validWords: string[] | "dictionary" | null };
+export type TGameOptions = { answer: string; maxGuesses?: number; validWords: string[] | "english-dictionary" | null };
 
 const StyledWordRacks = styled.div`
 	padding: 0.25rem;
@@ -29,20 +31,27 @@ const StyledInstruction = styled.h2`
 	margin-bottom: 0.5rem;
 `;
 
-const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
-	const wordSet = useMemo(() => {
+const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
+	// const fuse = new Fuse(pokemon);
+
+	const [wordSet, fuse] = useMemo(() => {
 		switch (validWords) {
-			case "dictionary":
-				return new Set(englishDictionary);
+			case "english-dictionary":
+				return [new Set(englishDictionary), new Fuse(englishDictionary)];
 			case null:
-				return null;
+				return [null, null];
 			default:
-				return new Set(validWords);
+				return [new Set(validWords), new Fuse(validWords)];
 		}
 	}, [validWords]);
+	// const fuse = useMemo(() => new Fuse(wordSet), []);
 
 	const [knownMinLength, setKnownMinLength] = useState(0);
-	const [knownMaxLength, setKnownMaxLength] = useState(15);
+	const [knownMaxLength, setKnownMaxLength] = useState(MAX_ANSWER_LENGTH);
+
+	const [greenLetters, setGreenLetters] = useState<string[]>([]);
+	const [orangeLetters, setOrangeLetters] = useState<string[]>([]);
+	const [greyLetters, setGreyLetters] = useState<string[]>([]);
 	const [currentGuess, setCurrentGuess] = useState("");
 	const [gameState, setGameState] = useState<"WIN" | "LOSS" | "">("");
 	const [prevGuesses, setPrevGuesses] = useState<Array<string>>([]);
@@ -50,17 +59,45 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 	const calculateKnownMinLength = useCallback(() => {
 		let newLatest = 0;
 		for (let i = knownMinLength; i < currentGuess.length; i++) {
-			if (currentGuess[i] === word[i]) {
+			if (currentGuess[i] === answer[i]) {
 				newLatest = i;
 			}
 		}
 		if (newLatest) {
 			setKnownMinLength(newLatest + 1);
 		}
-	}, [currentGuess, setKnownMinLength, word, knownMinLength]);
+	}, [currentGuess, setKnownMinLength, answer, knownMinLength]);
+
+	const updateKeyboardColours = useCallback(
+		(guess: string, target: string) => {
+			const greens = new Set(greenLetters);
+			const oranges = new Set(orangeLetters);
+			const greys = new Set(greyLetters);
+
+			for (let i = 0; i < guess.length; i++) {
+				if (guess.charAt(i) === target.charAt(i)) {
+					greens.add(guess.charAt(i));
+				} else {
+					if (target.indexOf(guess.charAt(i)) !== -1) {
+						oranges.add(guess.charAt(i));
+					} else {
+						greys.add(guess.charAt(i));
+					}
+				}
+			}
+			setOrangeLetters(Array.from(oranges));
+			setGreenLetters(Array.from(greens));
+			setGreyLetters(Array.from(greys));
+		},
+		[greenLetters, orangeLetters, greyLetters, setGreyLetters, setOrangeLetters, setGreenLetters],
+	);
 
 	const trySubmit = useCallback(() => {
 		if (wordSet && !wordSet.has(currentGuess)) {
+			const searchResults = fuse.search(currentGuess);
+			if (searchResults.filter((e) => e.item.length <= knownMaxLength)[0]) {
+				toast("Did you mean " + capitaliseWord(searchResults[0].item) + "?");
+			}
 			toast.error("Only valid pokemon names are allowed");
 			return;
 		}
@@ -70,26 +107,30 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 		}
 
 		calculateKnownMinLength();
+		updateKeyboardColours(currentGuess, answer);
 		setPrevGuesses([...prevGuesses, currentGuess]);
 		setCurrentGuess("");
-		if (currentGuess === word) {
+		if (currentGuess === answer) {
 			setGameState("WIN");
 			winAnimation();
 		} else if (prevGuesses.length >= maxGuesses) {
 			setGameState("LOSS");
-		} else if (currentGuess.length === word.length) {
-			setKnownMaxLength(word.length);
+		} else if (currentGuess.length === answer.length) {
+			setKnownMaxLength(answer.length);
 		}
 	}, [
 		setPrevGuesses,
 		setCurrentGuess,
 		setGameState,
-		word,
+		answer,
 		maxGuesses,
 		wordSet,
 		currentGuess,
 		prevGuesses,
 		calculateKnownMinLength,
+		updateKeyboardColours,
+		fuse,
+		knownMaxLength,
 	]);
 
 	const handleBackspace = useCallback(() => {
@@ -113,7 +154,7 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 					<Word
 						key={index}
 						current={guess}
-						target={word}
+						target={answer}
 						complete={true}
 						knownMinLength={knownMinLength}
 						knownMaxLength={knownMaxLength}
@@ -122,7 +163,7 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 				{!gameState && (
 					<Word
 						current={currentGuess}
-						target={word}
+						target={answer}
 						complete={false}
 						knownMinLength={knownMinLength}
 						knownMaxLength={knownMaxLength}
@@ -136,10 +177,10 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 						"Congrats!"
 					) : (
 						<>
-							<span style={{ textTransform: "capitalize" }}>{word}!</span> Better luck next time..
+							<span style={{ textTransform: "capitalize" }}>{answer}!</span> Better luck next time..
 						</>
 					)
-				) : knownMaxLength === 15 ? (
+				) : knownMaxLength === MAX_ANSWER_LENGTH ? (
 					"Enter a pokemon... (1st gen)"
 				) : (
 					<>It has {knownMaxLength} letters!</>
@@ -151,6 +192,9 @@ const Game = ({ word, maxGuesses = 5, validWords = null }: Props) => {
 				handleEnter={trySubmit}
 				handleBackspace={handleBackspace}
 				handleLetter={handleLetter}
+				greens={greenLetters}
+				oranges={orangeLetters}
+				greys={greyLetters}
 			/>
 		</div>
 	);

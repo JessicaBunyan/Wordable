@@ -1,4 +1,24 @@
 .keyboard {
 	/* border: solid 1px black; */
 	padding: 0.5rem 0.5rem 1rem 0.5rem;
+	text-transform: uppercase;
+	font-weight: bold;
+	/* background: var(--blue); */
+	/* height: 200px; */
+}
+
+.keyboard .hg-button {
+	height: 52px;
+}
+
+.keyboard .grey {
+	background-color: var(--grey);
+}
+
+.keyboard .orange {
+	background-color: var(--orange);
+}
+
+.keyboard .green {
+	background-color: var(--green);
 }

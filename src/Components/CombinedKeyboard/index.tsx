@@ -8,13 +8,24 @@ type Props = {
 	handleBackspace: () => void;
 	handleLetter: (letter: string) => void;
 	handleEnter: () => void;
+	greens: string[];
+	oranges: string[];
+	greys: string[];
 };
 
 // const StyledKeyboardContainer = styled.div`
 
 // `
 
-const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, handleEnter }: Props) => {
+const CombinedKeyboard = ({
+	disabled = false,
+	handleBackspace,
+	handleLetter,
+	handleEnter,
+	greens,
+	oranges,
+	greys,
+}: Props) => {
 	// const keyboard = useRef<SimpleKeyboard>();
 
 	const handlePhysicalKeyUp = useCallback(
@@ -63,6 +74,27 @@ const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, han
 		[disabled, handleBackspace, handleEnter, handleLetter],
 	);
 
+	const buttonThemes = [];
+	if (greens.length) {
+		buttonThemes.push({
+			buttons: greens.join(" "),
+			class: "green",
+		});
+	}
+	if (oranges.length) {
+		buttonThemes.push({
+			buttons: oranges.join(" "),
+			class: "orange",
+		});
+	}
+	if (greys.length) {
+		buttonThemes.push({
+			buttons: greys.join(" "),
+			class: "grey",
+		});
+	}
+
+	console.log(buttonThemes);
 	return (
 		<Keyboard
 			// keyboardRef={(r) => (keyboard.current = r)}
@@ -73,6 +105,7 @@ const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, han
 				"{bksp}": "⌫",
 				"{enter}": "↵",
 			}}
+			buttonTheme={buttonThemes}
 		/>
 	);
 };

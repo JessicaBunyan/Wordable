@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Letter from "../Letter";
 import styled from "styled-components";
+import { MAX_ANSWER_LENGTH } from "../Game";
 
 type Props = { target: string; current: string; complete: boolean; knownMinLength: number; knownMaxLength: number };
 
@@ -28,10 +29,10 @@ const StyledCorrectEndMarker = styled(StyledEndMarker)`
 	color: var(--green);
 `;
 
-const Word = ({ target, current, complete, knownMinLength = 0, knownMaxLength = 15 }: Props) => {
+const Word = ({ target, current, complete, knownMinLength = 0, knownMaxLength = MAX_ANSWER_LENGTH }: Props) => {
 	const userKnowsLength = knownMaxLength === target.length;
 	const letters = [];
-	for (let i = 0; i < 15; i++) {
+	for (let i = 0; i < MAX_ANSWER_LENGTH; i++) {
 		if (complete && !current[i]) {
 			continue;
 		}

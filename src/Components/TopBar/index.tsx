@@ -6,7 +6,8 @@ const StyledNav = styled.nav`
 	display: block;
 	display: flex;
 	height: var(--top-bar-height);
-
+	background: var(--nav-bg);
+	/* background: var(--blue); */
 	& * {
 		flex-basis: 80px;
 		font-weight: bold;
@@ -26,6 +27,19 @@ const StyledNav = styled.nav`
 		width: 24px;
 		padding-bottom: 6px;
 	}
+	/* &:after {
+		content: " ";
+		background: var(--blue);
+		 /* width: var(--top-bar-height);
+		width: 30%;
+		height: var(--top-bar-height);
+		position: absolute;
+		top: 0;
+		left: 0;
+		clip-path: polygon(0 0, 0% 100%, 100% 0);
+
+		/* z-index: 4; 
+	} */
 `;
 const StyledUL = styled.ul`
 	display: flex;
@@ -64,6 +78,7 @@ const StyledSpacer = styled.div`
 const StyledH1 = styled.h1`
 	justify-self: center;
 	margin: 0 1rem;
+	z-index: 2;
 	@media screen and (max-width: 600px) {
 		font-size: 1.5rem;
 	}
@@ -78,7 +93,7 @@ const TopBar = ({ onReset, setShowHelp }: Props) => {
 	return (
 		<StyledNav>
 			<StyledSpacer />
-			<StyledH1>Pokemondle</StyledH1>
+			<StyledH1>Pokémonable</StyledH1>
 			<StyledUL>
 				<StyledLI>
 					<a onClick={() => setShowHelp(true)}>?</a>
