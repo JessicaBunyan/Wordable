@@ -27,10 +27,10 @@ const pokemon = [
 	"raichu",
 	"sandshrew",
 	"sandslash",
-	"nidoran♀",
+	"nidoran",
 	"nidorina",
 	"nidoqueen",
-	"nidoran♂",
+	"nidoran",
 	"nidorino",
 	"nidoking",
 	"clefairy",
@@ -81,7 +81,7 @@ const pokemon = [
 	"slowbro",
 	"magnemite",
 	"magneton",
-	"farfetch'd",
+	"farfetchd",
 	"doduo",
 	"dodrio",
 	"seel",
@@ -120,7 +120,7 @@ const pokemon = [
 	"seaking",
 	"staryu",
 	"starmie",
-	"mr. mime",
+	"mrmime",
 	"scyther",
 	"jynx",
 	"electabuzz",
@@ -151,5 +151,4 @@ const pokemon = [
 	"mewtwo",
 	"mew",
 ];
-
 export default pokemon;
