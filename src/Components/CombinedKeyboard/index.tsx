@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from "react";
+import "./keyboard.css";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 
@@ -41,7 +42,7 @@ const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, han
 		return () => document.removeEventListener("keyup", handlePhysicalKeyUp);
 	}, [handlePhysicalKeyUp]);
 
-	const keyboardLayout = { default: ["q w e r t y u i o p", "a s d f g h j k l", "z x c v b n m {bksp} {enter}"] };
+	const keyboardLayout = { default: ["q w e r t y u i o p", "a s d f g h j k l", "{bksp} z x c v b n m {enter}"] };
 
 	const onVirtualKeyboardPress = useCallback(
 		(button: string) => {
@@ -65,8 +66,13 @@ const CombinedKeyboard = ({ disabled = false, handleBackspace, handleLetter, han
 	return (
 		<Keyboard
 			// keyboardRef={(r) => (keyboard.current = r)}
+			theme="hg-theme-default keyboard"
 			layout={keyboardLayout}
 			onKeyPress={onVirtualKeyboardPress}
+			display={{
+				"{bksp}": "⌫",
+				"{enter}": "↵",
+			}}
 		/>
 	);
 };

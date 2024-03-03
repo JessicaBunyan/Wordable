@@ -3,6 +3,14 @@
 	--red: #c32222;
 	--orange: #fa881e;
 	--border: #444;
+
+	--top-bar-height: 4rem;
+}
+
+@media (max-width: 600px) {
+	:root {
+		--top-bar-height: 3rem;
+	}
 }
 
 /* c, #53a653, #4a934a, #408140, #376e37. Brand original color codes, colors palette. */
@@ -26,6 +34,17 @@ body {
 	margin: 4rem auto;
 	border: solid 3px tan;
 	border-radius: 1rem;
+	overflow: hidden;
+}
+
+@media screen and (max-width: 600px) {
+	.game-container {
+		margin: 0;
+		width: 100%;
+		height: calc(100% - var(--top-bar-height));
+		overflow: hidden;
+		border: none;
+	}
 }
 
 #game {

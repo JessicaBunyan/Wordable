@@ -14,8 +14,8 @@ export const MAX_ANSWER_LENGTH = 15;
 type Props = { word: string; maxGuesses?: number; validWords: string[] | "dictionary" | null };
 
 const StyledWordRacks = styled.div`
+	padding: 0.25rem;
 	font-size: 2rem;
-
 	display: flex;
 	flex-direction: column;
 	gap: 0.2rem;
