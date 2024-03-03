@@ -6,6 +6,7 @@ export default function winAnimation() {
 	const animationEnd = Date.now() + duration;
 	const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
+	// eslint-disable-next-line
 	const interval: any = setInterval(function () {
 		const timeLeft = animationEnd - Date.now();
 

@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
-import styled from "styled-components";
 
 type Props = {
 	disabled?: boolean;

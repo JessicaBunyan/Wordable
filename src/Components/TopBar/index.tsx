@@ -61,9 +61,7 @@ const TopBar = () => {
 			<StyledSpacer />
 			<StyledH1>Pokemondle</StyledH1>
 			<StyledUL>
-				{/* <StyledLI>
-					<a>?</a>
-				</StyledLI> */}
+				<StyledLI>{/* <a>?</a> */}</StyledLI>
 			</StyledUL>
 		</StyledNav>
 	);

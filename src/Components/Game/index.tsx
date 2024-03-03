@@ -1,12 +1,11 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
-import confetti from "canvas-confetti";
 import "react-simple-keyboard/build/css/index.css";
 import styled from "styled-components";
-import CombinedKeyboard from "../CombinedKeyboard";
-import Word from "../Word";
 import englishDictionary from "../../GameFiles/englishDictionary";
 import winAnimation from "../../utils/winAnimation";
+import CombinedKeyboard from "../CombinedKeyboard";
+import Word from "../Word";
 
 export const MAX_ANSWER_LENGTH = 15;
 
