@@ -5,11 +5,25 @@ interface Env {
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
-	const cached = await context.env.KV.get("last_id");
+	const kv = context.env.kv;
+	const cached = tryGet(kv, "last_param");
 	if (cached) {
 		return new Response("Hello, world! KV is working!");
 	}
 
-	await context.env.KV.put("keyput", (context.params.id as string) || "no id ");
-	return new Response("Hello, world!" + String(context.params));
+	try {
+		await context.env.KV.put("last_param", String(context.params.id as string) || "no id ");
+	} catch (e) {
+		return new Response("didn't work", { status: 500 });
+	}
+	return new Response("Hello, world! cache miss");
+};
+
+export const tryGet = async (kv: KVNamespace, key: string, _default = "") => {
+	try {
+		return kv.get(key);
+	} catch (e) {
+		console.log(e);
+		return _default;
+	}
 };
