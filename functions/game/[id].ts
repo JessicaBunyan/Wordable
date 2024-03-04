@@ -1,4 +1,4 @@
-import { PagesFunction, KVNamespace, Response } from "@cloudflare/workers-types";
+import { PagesFunction, KVNamespace } from "@cloudflare/workers-types";
 
 interface Env {
 	test: KVNamespace;
