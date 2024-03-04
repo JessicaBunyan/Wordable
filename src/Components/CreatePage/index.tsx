@@ -1,17 +1,13 @@
 import { useForm } from "react-hook-form";
 
-type Props = {
-	a?: boolean;
-};
-
-export const API_URL = "https://wordable-8b8.pages.dev";
+export const API_URL = "";
 
 type FormValues = {
 	name: string;
 	validWords?: string[] | "ENGLISH_DICTIONARY" | "ANY";
 };
 
-const CreatePage = (props: Props) => {
+const CreatePage = () => {
 	const { register, handleSubmit } = useForm<FormValues>();
 
 	const onSubmit = handleSubmit(async (data, event) => {
