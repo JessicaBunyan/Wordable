@@ -10,7 +10,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 		return new Response(value);
 	}
 
-	return new Response("no such key with this ID", { status: 404 });
+	return new Response("no such key with this ID ", { status: 404 });
 };
 
 export const tryGet = async (kv: KVNamespace, key: string, _default = "") => {
