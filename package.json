@@ -48,6 +48,7 @@
 		]
 	},
 	"devDependencies": {
+		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
 		"@types/canvas-confetti": "^1.6.4",
 		"@types/node": "^20.11.24",
 		"@types/react-modal": "^3.16.3",
