@@ -3,6 +3,7 @@ can enter more characters than the known correct amount but they don't show. wei
 spellcheck ? 
 
 mobile experience
+favicon/page title
 
 general styling
 cleanup code interface for use with different wordlists etc

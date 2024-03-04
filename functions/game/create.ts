@@ -19,5 +19,5 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 	} catch (e) {
 		return new Response("didn't work", { status: 500 });
 	}
-	return new Response(id, { status: 201 });
+	return new Response(JSON.stringify({ id }), { status: 201 });
 };
