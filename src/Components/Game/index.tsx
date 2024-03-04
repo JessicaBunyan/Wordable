@@ -32,19 +32,16 @@ const StyledInstruction = styled.h2`
 `;
 
 const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
-	// const fuse = new Fuse(pokemon);
-
 	const [wordSet, fuse] = useMemo(() => {
 		switch (validWords) {
 			case "english-dictionary":
-				return [new Set(englishDictionary), new Fuse(englishDictionary)];
+				return [new Set(englishDictionary), new Fuse(englishDictionary, { includeScore: true })];
 			case null:
 				return [null, null];
 			default:
-				return [new Set(validWords), new Fuse(validWords)];
+				return [new Set(validWords), new Fuse(validWords, { threshold: 0.25 })];
 		}
 	}, [validWords]);
-	// const fuse = useMemo(() => new Fuse(wordSet), []);
 
 	const [knownMinLength, setKnownMinLength] = useState(0);
 	const [knownMaxLength, setKnownMaxLength] = useState(MAX_ANSWER_LENGTH);
@@ -94,8 +91,8 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 
 	const trySubmit = useCallback(() => {
 		if (wordSet && !wordSet.has(currentGuess)) {
-			const searchResults = fuse.search(currentGuess);
-			if (searchResults.filter((e) => e.item.length <= knownMaxLength)[0]) {
+			const searchResults = fuse.search(currentGuess).filter((e) => e.item.length <= knownMaxLength);
+			if (searchResults[0]) {
 				toast("Did you mean " + capitaliseWord(searchResults[0].item) + "?");
 			}
 			toast.error("Only valid pokemon names are allowed");

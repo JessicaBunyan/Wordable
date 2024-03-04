@@ -42,8 +42,6 @@ const CombinedKeyboard = ({
 				!disabled && handleLetter(e.key.toLowerCase());
 				return;
 			}
-
-			console.log("invalid character");
 		},
 		[handleBackspace, handleEnter, handleLetter, disabled],
 	);
@@ -94,7 +92,6 @@ const CombinedKeyboard = ({
 		});
 	}
 
-	console.log(buttonThemes);
 	return (
 		<Keyboard
 			// keyboardRef={(r) => (keyboard.current = r)}
