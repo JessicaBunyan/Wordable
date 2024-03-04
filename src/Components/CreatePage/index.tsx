@@ -20,7 +20,7 @@ const CreatePage = () => {
 			method: "POST",
 			body: JSON.stringify({ ...data, color: "red" }),
 		});
-		if (res.status !== 201) {
+		if (res.status == 201) {
 			const data = await res.json();
 			console.log("new url is " + data.id);
 			console.log(API_URL + "/game/" + data.id);
