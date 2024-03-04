@@ -10,6 +10,6 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 		return new Response("Hello, world! KV is working!");
 	}
 
-	await context.env.test.put("keyput", context.params.id || "no id ");
+	await context.env.test.put("keyput", (context.params.id as string) || "no id ");
 	return new Response("Hello, world!" + String(context.params));
 };
