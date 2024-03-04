@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export const API_URL = "";
 
@@ -9,6 +10,7 @@ type FormValues = {
 
 const CreatePage = () => {
 	const { register, handleSubmit } = useForm<FormValues>();
+	const navigate = useNavigate();
 
 	const onSubmit = handleSubmit(async (data, event) => {
 		console.log("submit");
@@ -24,6 +26,7 @@ const CreatePage = () => {
 			const data = await res.json();
 			console.log("new url is " + data.id);
 			console.log(API_URL + "/game/" + data.id);
+			navigate(API_URL + "/game/" + data.id);
 		} else {
 			console.error("uhoh");
 			console.log(res);
