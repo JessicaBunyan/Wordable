@@ -12,6 +12,7 @@ type FormValues = {
 };
 
 const CreatePage = (props: Props) => {
+	console.log(props);
 	const { register, handleSubmit } = useForm<FormValues>();
 
 	const onSubmit = handleSubmit(async (data, event) => {
