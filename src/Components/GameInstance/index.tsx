@@ -3,12 +3,16 @@ import styled from "styled-components";
 import useGame from "../../Hooks/useGame";
 import CombinedKeyboard from "../CombinedKeyboard";
 import Word from "../Word";
+import { TGameSetup } from "../../App";
 
 export const MAX_ANSWER_LENGTH = 10;
 
 export type TValidWords = string[] | "english-dictionary" | null;
-export type TGameOptions = { answer: string; maxGuesses?: number; validWords: TValidWords };
+export type TGameOptions = TGameSetup & { answer: string };
 
+type TProps = {
+	options: TGameOptions;
+};
 const StyledWordRacks = styled.div`
 	padding: 0.25rem;
 	font-size: 2rem;
@@ -25,7 +29,7 @@ const StyledInstruction = styled.h2`
 	margin-bottom: 0.5rem;
 `;
 
-const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
+const GameInstance = (props: TProps) => {
 	const {
 		gameRows,
 		charWidth,
@@ -40,7 +44,7 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 		greenLetters,
 		greyLetters,
 		message,
-	} = useGame(validWords, answer, maxGuesses);
+	} = useGame(props.options);
 
 	return (
 		<div id="game">
@@ -51,7 +55,7 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 						index={index}
 						isCurrent={index === gameRows.length - 1 && !gameState}
 						submittedWord={guess}
-						targetWord={answer}
+						targetWord={props.options.answer}
 						charWidth={charWidth}
 						knownMinLength={knownMinLength}
 						knownMaxLength={knownAnswerLength}
@@ -74,4 +78,4 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 		</div>
 	);
 };
-export default Game;
+export default GameInstance;

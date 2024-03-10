@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { MAX_ANSWER_LENGTH } from "../Game";
+import { MAX_ANSWER_LENGTH } from "../GameInstance";
 import Letter from "../Letter";
 import styled from "styled-components";
 import EndMarker from "../EndMarker";

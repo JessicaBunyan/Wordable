@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { MAX_ANSWER_LENGTH, TValidWords } from "../Components/Game";
+import { MAX_ANSWER_LENGTH, TGameOptions } from "../Components/GameInstance";
 
 import Fuse from "fuse.js";
 import toast from "react-hot-toast";
@@ -8,17 +8,26 @@ import englishDictionary from "../GameFiles/englishDictionary";
 import capitaliseWord from "../utils/capitaliseWord";
 import winAnimation from "../utils/winAnimation";
 
-export default function useGame(validWords: TValidWords, answer: string, maxGuesses: number) {
-	const [wordSet, fuse] = useMemo(() => {
+export default function useGame(options: TGameOptions) {
+	const { answer, entityName, validWords, maxGuesses = 5, suggestions } = options;
+	const [wordSet, fuse, invalidWordMessage] = useMemo(() => {
 		switch (validWords) {
 			case "english-dictionary":
-				return [new Set(englishDictionary), new Fuse(englishDictionary, { includeScore: true })];
+				return [
+					new Set(englishDictionary),
+					suggestions ? new Fuse(englishDictionary, { includeScore: true }) : null,
+					`Only valid english words are allowed`,
+				];
 			case null:
-				return [null, null];
+				return [null, null, null];
 			default:
-				return [new Set(validWords), new Fuse(validWords, { threshold: 0.25 })];
+				return [
+					new Set(validWords),
+					suggestions ? new Fuse(validWords, { threshold: 0.25 }) : null,
+					`Only valid ${entityName} names are allowed`,
+				];
 		}
-	}, [validWords]);
+	}, [validWords, entityName, suggestions]);
 
 	const [knownMinLength, setKnownMinLength] = useState(0);
 	const [knownAnswerLength, setKnownAnswerLength] = useState<number | undefined>(undefined);
@@ -69,11 +78,13 @@ export default function useGame(validWords: TValidWords, answer: string, maxGues
 
 	const handleSubmit = useCallback(() => {
 		if (wordSet && !wordSet.has(currentGuess)) {
-			const searchResults = fuse.search(currentGuess).filter((e) => e.item.length <= maxSubmitLength);
-			if (searchResults[0]) {
-				toast("Did you mean " + capitaliseWord(searchResults[0].item) + "?");
+			if (fuse) {
+				const searchResults = fuse.search(currentGuess).filter((e) => e.item.length <= maxSubmitLength);
+				if (searchResults[0]) {
+					toast("Did you mean " + capitaliseWord(searchResults[0].item) + "?");
+				}
 			}
-			toast.error("Only valid pokemon names are allowed");
+			toast.error(invalidWordMessage);
 			return;
 		}
 		if (prevGuesses.indexOf(currentGuess) !== -1) {
@@ -107,6 +118,7 @@ export default function useGame(validWords: TValidWords, answer: string, maxGues
 		updateKeyboardColours,
 		fuse,
 		maxSubmitLength,
+		invalidWordMessage,
 	]);
 
 	const handleBackspace = useCallback(() => {
@@ -159,8 +171,8 @@ export default function useGame(validWords: TValidWords, answer: string, maxGues
 			return `It has ${knownAnswerLength} letters!`;
 		}
 
-		return "Enter a pokemon... (1st gen)";
-	}, [gameState, knownAnswerLength, answer]);
+		return "Enter a " + entityName;
+	}, [gameState, knownAnswerLength, entityName, answer]);
 
 	return {
 		gameRows,

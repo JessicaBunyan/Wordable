@@ -1,0 +1,28 @@
+const colors = [
+	"red",
+	"orange",
+	"yellow",
+	"green",
+	"cyan",
+	"blue",
+	"magenta",
+	"purple",
+	"white",
+	"black",
+	"grey",
+	"silver",
+	"pink",
+	"maroon",
+	"brown",
+	"beige",
+	"tan",
+	"peach",
+	"lime",
+	"olive",
+	"turquoise",
+	"teal",
+	"indigo",
+	"violet",
+];
+
+export default colors;

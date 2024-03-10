@@ -1,62 +1,77 @@
-import { useCallback, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import Game from "./Components/Game";
-import HelpModal from "./Components/HelpModal";
-import TopBar from "./Components/TopBar";
-import pokemon from "./GameFiles/pokemon";
-import randElement from "./utils/randElement";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CreatePage from "./Components/CreatePage";
+import GamePage from "./Components/GamePage";
+import pokemon from "./GameFiles/pokemon";
+import { TValidWords } from "./Components/GameInstance";
+import colors from "./GameFiles/colors";
+import { ReactNode } from "react";
+
+export type TGameSetup = {
+	answers: string[];
+	title: string;
+	icon?: string;
+	maxGuesses?: number;
+	validWords: TValidWords;
+	entityName: string;
+	helpItems?: string[] | ReactNode[];
+	suggestions?: null | "to-answers";
+};
+
+const games: { [key: string]: TGameSetup } = {
+	pokemon: {
+		answers: pokemon,
+		title: "Pokémonable",
+		validWords: pokemon,
+		entityName: "pokémon (1st gen)",
+		helpItems: ["Only valid pokemon are accepted", "All punctuation/symbols are removed (mrmime, farfetchd, nidoran)"],
+		suggestions: "to-answers",
+	},
+	"*": {
+		answers: pokemon,
+		title: "Pokémonable",
+		validWords: pokemon,
+		entityName: "pokémon (1st gen)",
+		helpItems: ["Only valid pokemon are accepted", "All punctuation/symbols are removed (mrmime, farfetchd, nidoran)"],
+		suggestions: "to-answers",
+	},
+	colours: {
+		answers: colors,
+		title: "Colourable",
+		validWords: "english-dictionary",
+		entityName: "colour",
+	},
+};
 
 function App() {
 	const toastPosition = window.innerWidth <= 600 ? "top-center" : "bottom-right";
-
-	const [target, setTarget] = useState(randElement(pokemon));
-	// const [target, setTarget] = useState("");
-	const [showHelp, setShowHelp] = useState(false);
-	const validWords = pokemon;
-	const button = useRef<HTMLButtonElement>(null);
-
-	const onReset = useCallback(() => {
-		setTarget(randElement(pokemon));
-		button.current?.blur();
-	}, [button, setTarget]);
 
 	return (
 		<BrowserRouter>
 			<Routes>
 				<Route path="/create" element={<CreatePage />}></Route>
-				<Route
-					path="*"
-					element={
-						<div className="app">
-							<TopBar onReset={onReset} setShowHelp={setShowHelp} />
-							<div className="game-container">
-								{target && <Game key={target} answer={target} validWords={validWords} />}
-							</div>
-							;{showHelp && <HelpModal isOpen={showHelp} onClose={() => setShowHelp(false)} />}
-							<Toaster
-								toastOptions={{
-									duration: 3000,
-									position: toastPosition,
-									className: "toast",
-									error: {
-										style: {
-											background: "var(--red)",
-											color: "white",
-										},
-									},
-									style: {
-										background: "var(--blue)",
-										fontWeight: "bold",
-										color: "black",
-									},
-								}}
-							/>
-						</div>
-					}
-				/>
+				{Object.entries(games).map(([key, gameSetup]) => (
+					<Route key={key} path={`/${key}`} element={<GamePage {...gameSetup} />} />
+				))}
 			</Routes>
+			<Toaster
+				toastOptions={{
+					duration: 3000,
+					position: toastPosition,
+					className: "toast",
+					error: {
+						style: {
+							background: "var(--red)",
+							color: "white",
+						},
+					},
+					style: {
+						background: "var(--blue)",
+						fontWeight: "bold",
+						color: "black",
+					},
+				}}
+			/>
 		</BrowserRouter>
 	);
 }
