@@ -5,12 +5,10 @@ import styled from "styled-components";
 import englishDictionary from "../../GameFiles/englishDictionary";
 import winAnimation from "../../utils/winAnimation";
 import CombinedKeyboard from "../CombinedKeyboard";
-import SubmittedWord from "../SubmittedWord";
 import Fuse from "fuse.js";
-
 import toast from "react-hot-toast";
 import capitaliseWord from "../../utils/capitaliseWord";
-import CurrentWord from "../CurrentWord";
+import Word from "../Word";
 
 export const MAX_ANSWER_LENGTH = 10;
 
@@ -45,7 +43,8 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 	}, [validWords]);
 
 	const [knownMinLength, setKnownMinLength] = useState(0);
-	const [knownMaxLength, setKnownMaxLength] = useState(MAX_ANSWER_LENGTH);
+	const [knownAnswerLength, setKnownAnswerLength] = useState<number | undefined>(undefined);
+	const maxSubmitLength = Math.min(knownAnswerLength || MAX_ANSWER_LENGTH);
 
 	const [greenLetters, setGreenLetters] = useState<string[]>([]);
 	const [orangeLetters, setOrangeLetters] = useState<string[]>([]);
@@ -92,7 +91,7 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 
 	const trySubmit = useCallback(() => {
 		if (wordSet && !wordSet.has(currentGuess)) {
-			const searchResults = fuse.search(currentGuess).filter((e) => e.item.length <= knownMaxLength);
+			const searchResults = fuse.search(currentGuess).filter((e) => e.item.length <= maxSubmitLength);
 			if (searchResults[0]) {
 				toast("Did you mean " + capitaliseWord(searchResults[0].item) + "?");
 			}
@@ -108,13 +107,14 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 		updateKeyboardColours(currentGuess, answer);
 		setPrevGuesses([...prevGuesses, currentGuess]);
 		setCurrentGuess("");
+		if (currentGuess.length === answer.length) {
+			setKnownAnswerLength(answer.length);
+		}
 		if (currentGuess === answer) {
 			setGameState("WIN");
 			winAnimation();
 		} else if (prevGuesses.length >= maxGuesses) {
 			setGameState("LOSS");
-		} else if (currentGuess.length === answer.length) {
-			setKnownMaxLength(answer.length);
 		}
 	}, [
 		setPrevGuesses,
@@ -128,7 +128,7 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 		calculateKnownMinLength,
 		updateKeyboardColours,
 		fuse,
-		knownMaxLength,
+		maxSubmitLength,
 	]);
 
 	const handleBackspace = useCallback(() => {
@@ -138,22 +138,46 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 
 	const handleLetter = useCallback(
 		(letter: string) => {
-			if (currentGuess.length < knownMaxLength) {
+			if (currentGuess.length < maxSubmitLength) {
 				setCurrentGuess(currentGuess + letter);
 			}
 		},
-		[currentGuess, setCurrentGuess, knownMaxLength],
+		[currentGuess, setCurrentGuess, maxSubmitLength],
 	);
 
+	const charWidth = knownAnswerLength ? Math.max(...prevGuesses.map((m) => m.length)) : MAX_ANSWER_LENGTH;
+
+	const gameRows = [...prevGuesses];
+	if (!gameState) {
+		gameRows.push(currentGuess);
+	}
 	return (
 		<div id="game">
 			<StyledWordRacks>
-				{prevGuesses.map((guess, index) => (
-					<SubmittedWord key={index} submittedWord={guess} targetWord={answer} />
+				{gameRows.map((guess, index) => (
+					<Word
+						key={index}
+						index={index}
+						isCurrent={index === gameRows.length - 1 && !gameState}
+						submittedWord={guess}
+						targetWord={answer}
+						charWidth={charWidth}
+						knownMinLength={knownMinLength}
+						knownMaxLength={knownAnswerLength}
+						maxSubmitLength={maxSubmitLength}
+					/>
+				))}
+				{/* {prevGuesses.map((guess, index) => (
+					<SubmittedWord key={index} submittedWord={guess} targetWord={answer} maxAnswerLength={maxAnswerLength} />
 				))}
 				{!gameState && (
-					<CurrentWord current={currentGuess} knownMinLength={knownMinLength} knownMaxLength={knownMaxLength} />
-				)}
+					<CurrentWord
+						key={prevGuesses.length}
+						current={currentGuess}
+						knownMinLength={knownMinLength}
+						maxAnswerLength={maxAnswerLength}
+					/>
+				)} */}
 			</StyledWordRacks>
 
 			<StyledInstruction>
@@ -165,10 +189,10 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 							<span style={{ textTransform: "capitalize" }}>{answer}!</span> Better luck next time..
 						</>
 					)
-				) : knownMaxLength === MAX_ANSWER_LENGTH ? (
+				) : knownAnswerLength === MAX_ANSWER_LENGTH ? (
 					"Enter a pokemon... (1st gen)"
 				) : (
-					<>It has {knownMaxLength} letters!</>
+					<>It has {knownAnswerLength} letters!</>
 				)}
 			</StyledInstruction>
 

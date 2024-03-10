@@ -5,25 +5,23 @@ type Props = {
 	color: string;
 	index: number;
 	letter: string;
+	vanish?: boolean;
 };
 
-const StyledContainer = styled.div<{ $color?: string; $border?: string }>`
-	width: 2rem;
-	/* height: 3.5rem; */
-	/* line-height: 3.5rem; */
+const StyledContainer = styled.span<{ $color?: string; $vanish?: boolean }>`
+	flex-basis: 0rem;
+	flex-grow: ${(props) => (props.$vanish ? 0.0001 : 1)};
+	margin-right: ${(props) => (props.$vanish ? 0 : "4px")};
+	transition: flex-grow 300ms ease-out;
 	background: ${(props) => props.$color};
-	/* border: ${(props) => props.$border}; */
-	/* border: solid 1px black; */
-	/* font-size: 1.5rem; */
 	text-transform: uppercase;
-	margin: 0px;
 	font-weight: bold;
+	max-width: 2rem;
 `;
 
-export default function Letter({ color, letter }: Props) {
-	const border = "1";
+export default function Letter({ color, letter, vanish }: Props) {
 	return (
-		<StyledContainer $color={color} $border={border}>
+		<StyledContainer $color={color} $vanish={vanish} aria-hidden={vanish}>
 			{letter}
 		</StyledContainer>
 	);

@@ -11,8 +11,8 @@ import CreatePage from "./Components/CreatePage";
 function App() {
 	const toastPosition = window.innerWidth <= 600 ? "top-center" : "bottom-right";
 
-	const [target, setTarget] = useState(randElement(pokemon));
-	// const [target, setTarget] = useState("rattata");
+	// const [target, setTarget] = useState(randElement(pokemon));
+	const [target, setTarget] = useState("rattata");
 	const [showHelp, setShowHelp] = useState(false);
 	const validWords = pokemon;
 	const button = useRef<HTMLButtonElement>(null);

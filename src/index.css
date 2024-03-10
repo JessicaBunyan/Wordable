@@ -57,7 +57,3 @@ body {
 	flex-direction: column;
 	justify-content: flex-end;
 }
-
-#game:nth-child(2) {
-	/* flex-grow: 1; */
-}
