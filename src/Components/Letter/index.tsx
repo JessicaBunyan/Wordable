@@ -2,13 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 type Props = {
-	guess: string;
-	actual: string;
-	complete: boolean;
-	targetWord: string;
+	color: string;
 	index: number;
-	knownMinLength: number;
-	showOpacity: boolean;
+	letter: string;
 };
 
 const StyledContainer = styled.div<{ $color?: string; $border?: string }>`
@@ -24,33 +20,11 @@ const StyledContainer = styled.div<{ $color?: string; $border?: string }>`
 	font-weight: bold;
 `;
 
-export default function Letter({ guess, actual, complete, targetWord, index, showOpacity, knownMinLength }: Props) {
-	const correct = guess === actual && !!guess;
-	const wrongPlace = targetWord.indexOf(guess) > -1;
-	let color = "rgb(150,150,150)";
-	let border = "none"; //"solid 1px var(--border)";
-	if (complete) {
-		if (correct) {
-			color = "var(--green)";
-		} else if (wrongPlace) {
-			color = "var(--orange)";
-		}
-	} else {
-		if (showOpacity) {
-			const opacityIndex = index - Math.max(3, knownMinLength);
-			if (opacityIndex >= 0) {
-				const opacity = Math.min(0.5 - opacityIndex / (30 - knownMinLength), 1);
-				color = `rgba(150,150,150, ${opacity})`;
-				if (opacity !== 1) {
-					border = "dashed 1px var(--border)";
-				}
-			}
-		}
-	}
-
+export default function Letter({ color, letter }: Props) {
+	const border = "1";
 	return (
 		<StyledContainer $color={color} $border={border}>
-			{guess}
+			{letter}
 		</StyledContainer>
 	);
 }

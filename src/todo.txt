@@ -1,7 +1,5 @@
 can enter more characters than the known correct amount but they don't show. weird stuff happens if you submit these
 
-spellcheck ? 
-
 mobile experience
 favicon/page title
 

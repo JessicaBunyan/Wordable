@@ -5,11 +5,12 @@ import styled from "styled-components";
 import englishDictionary from "../../GameFiles/englishDictionary";
 import winAnimation from "../../utils/winAnimation";
 import CombinedKeyboard from "../CombinedKeyboard";
-import Word from "../Word";
+import SubmittedWord from "../SubmittedWord";
 import Fuse from "fuse.js";
 
 import toast from "react-hot-toast";
 import capitaliseWord from "../../utils/capitaliseWord";
+import CurrentWord from "../CurrentWord";
 
 export const MAX_ANSWER_LENGTH = 10;
 
@@ -148,23 +149,10 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 		<div id="game">
 			<StyledWordRacks>
 				{prevGuesses.map((guess, index) => (
-					<Word
-						key={index}
-						current={guess}
-						target={answer}
-						complete={true}
-						knownMinLength={knownMinLength}
-						knownMaxLength={knownMaxLength}
-					/>
+					<SubmittedWord key={index} submittedWord={guess} targetWord={answer} />
 				))}
 				{!gameState && (
-					<Word
-						current={currentGuess}
-						target={answer}
-						complete={false}
-						knownMinLength={knownMinLength}
-						knownMaxLength={knownMaxLength}
-					/>
+					<CurrentWord current={currentGuess} knownMinLength={knownMinLength} knownMaxLength={knownMaxLength} />
 				)}
 			</StyledWordRacks>
 
