@@ -28,11 +28,12 @@ function HelpModal({ isOpen, onClose }: Props) {
 				style={{
 					fontSize: "1.5rem",
 				}}>
-				Help v0.1
+				Help v0.2
 			</h1>
 			<ul>
 				<StyledLi>This is in beta</StyledLi>
-				<StyledLi>If the diamond goes green your guess was the correct length</StyledLi>
+				<StyledLi>If the number goes green your guess was the correct length</StyledLi>
+				<StyledLi>Reset will give you a new word</StyledLi>
 				<StyledLi>Only valid pokemon are accepted</StyledLi>
 				<StyledLi>Answers can be any length from 3-{MAX_ANSWER_LENGTH} chars</StyledLi>
 
