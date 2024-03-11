@@ -77,8 +77,6 @@ const CombinedKeyboard = ({
 		[disabled, handleBackspace, handleEnter, handleLetter],
 	);
 
-	console.log(keyboardLayout);
-
 	const buttonThemes = [];
 	if (greens.length) {
 		buttonThemes.push({

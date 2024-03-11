@@ -5,8 +5,6 @@ const keyboardLayouts: Record<string, string[]> = {
 export default function getKeyboardLayout(specialCharacters: string[]) {
 	const key = specialCharacters.sort().join("");
 
-	console.log(`key : '${key}'`);
-	console.log(keyboardLayouts[key]);
-
+	// Purposely throw an exception if its not found.
 	return { default: keyboardLayouts[key] };
 }
