@@ -101,7 +101,6 @@ const CombinedKeyboard = ({
 
 	return (
 		<Keyboard
-			// keyboardRef={(r) => (keyboard.current = r)}
 			theme="hg-theme-default keyboard"
 			layout={keyboardLayout}
 			onKeyPress={onVirtualKeyboardPress}

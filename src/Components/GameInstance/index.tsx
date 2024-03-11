@@ -24,7 +24,10 @@ const StyledWordRacks = styled.div`
 const StyledInstruction = styled.h2`
 	font-size: 1.5rem;
 	font-weight: bold;
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.25rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75rem;
 `;
 
 const GameInstance = (props: TProps) => {
