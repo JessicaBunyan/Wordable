@@ -46,7 +46,6 @@ const statesList = [
 	"Texas",
 	"Utah",
 	"Virginia",
-	"Virgin Islands",
 	"Vermont",
 	"Washington",
 	"Wisconsin",
