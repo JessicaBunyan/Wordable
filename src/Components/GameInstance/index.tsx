@@ -5,9 +5,7 @@ import CombinedKeyboard from "../CombinedKeyboard";
 import Word from "../Word";
 import { TGameSetup } from "../../App";
 
-export const MAX_ANSWER_LENGTH = 10;
-
-export type TValidWords = string[] | "english-dictionary" | null;
+export type TValidWords = string[] | null;
 export type TGameOptions = TGameSetup & { answer: string };
 
 type TProps = {
@@ -46,6 +44,8 @@ const GameInstance = (props: TProps) => {
 		message,
 	} = useGame(props.options);
 
+	const { validCharacters, keyboardLayout } = props.options;
+
 	return (
 		<div id="game">
 			<StyledWordRacks>
@@ -60,6 +60,7 @@ const GameInstance = (props: TProps) => {
 						knownMinLength={knownMinLength}
 						knownMaxLength={knownAnswerLength}
 						maxSubmitLength={maxSubmitLength}
+						characterLimit={props.options.characterLimit}
 					/>
 				))}
 			</StyledWordRacks>
@@ -67,6 +68,8 @@ const GameInstance = (props: TProps) => {
 			<StyledInstruction>{message}</StyledInstruction>
 
 			<CombinedKeyboard
+				validCharacters={validCharacters}
+				keyboardLayout={keyboardLayout}
 				disabled={gameState !== ""}
 				handleEnter={handleSubmit}
 				handleBackspace={handleBackspace}

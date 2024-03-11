@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "react-simple-keyboard/build/css/index.css";
 import { TGameSetup } from "../../App";
 import randElement from "../../utils/randElement";
@@ -7,15 +7,17 @@ import HelpModal from "../HelpModal";
 import TopBar from "../TopBar";
 
 const GamePage = (props: TGameSetup) => {
-	const { answers, title, helpItems = [] } = props;
+	const { answers, title } = props;
 	const [answer, setAnswer] = useState(randElement(answers));
 	const button = useRef<HTMLButtonElement>(null);
 	const [showHelp, setShowHelp] = useState(false);
 
-	const options: TGameOptions = {
-		...props,
-		answer,
-	};
+	const options: TGameOptions = useMemo(() => {
+		return {
+			...props,
+			answer,
+		};
+	}, [answer, props]);
 
 	const onReset = useCallback(() => {
 		setAnswer(randElement(answers));
@@ -29,7 +31,7 @@ const GamePage = (props: TGameSetup) => {
 		<>
 			<TopBar title={title} onReset={onReset} setShowHelp={setShowHelp} />
 			<div className="game-container">{answer && <GameInstance key={answer} options={options} />}</div>
-			{showHelp && <HelpModal helpItems={helpItems} isOpen={showHelp} onClose={() => setShowHelp(false)} />}
+			{showHelp && <HelpModal gameOptions={options} isOpen={showHelp} onClose={() => setShowHelp(false)} />}
 		</>
 	);
 };

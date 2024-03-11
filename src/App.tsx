@@ -3,22 +3,31 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CreatePage from "./Components/CreatePage";
 import GamePage from "./Components/GamePage";
 import pokemon from "./GameFiles/pokemon";
+import usStates from "./GameFiles/usStates";
 import { TValidWords } from "./Components/GameInstance";
 import colors from "./GameFiles/colors";
 import { ReactNode } from "react";
+import processSetupRecord from "./utils/processSetupRecord";
 
-export type TGameSetup = {
+export type TGamePageRecord = {
 	answers: string[];
 	title: string;
 	icon?: string;
 	maxGuesses?: number;
-	validWords: TValidWords;
+	validWords: TValidWords | "answers" | "english-dictionary";
 	entityName: string;
 	helpItems?: string[] | ReactNode[];
 	suggestions?: null | "to-answers";
 };
 
-const games: { [key: string]: TGameSetup } = {
+export type TGameSetup = TGamePageRecord & {
+	characterLimit: number;
+	validCharacters: string[];
+	validWords: TValidWords;
+	keyboardLayout: { default: string[] };
+};
+
+const games: { [key: string]: TGamePageRecord } = {
 	pokemon: {
 		answers: pokemon,
 		title: "Pokémonable",
@@ -41,6 +50,13 @@ const games: { [key: string]: TGameSetup } = {
 		validWords: "english-dictionary",
 		entityName: "colour",
 	},
+	states: {
+		answers: usStates,
+		entityName: "US state",
+		title: "Stateable",
+		suggestions: "to-answers",
+		validWords: "answers",
+	},
 };
 
 function App() {
@@ -51,7 +67,7 @@ function App() {
 			<Routes>
 				<Route path="/create" element={<CreatePage />}></Route>
 				{Object.entries(games).map(([key, gameSetup]) => (
-					<Route key={key} path={`/${key}`} element={<GamePage {...gameSetup} />} />
+					<Route key={key} path={`/${key}`} element={<GamePage {...processSetupRecord(gameSetup)} />} />
 				))}
 			</Routes>
 			<Toaster

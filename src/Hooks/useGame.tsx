@@ -1,23 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
-import { MAX_ANSWER_LENGTH, TGameOptions } from "../Components/GameInstance";
+import { TGameOptions } from "../Components/GameInstance";
 
 import Fuse from "fuse.js";
 import toast from "react-hot-toast";
 import "react-simple-keyboard/build/css/index.css";
-import englishDictionary from "../GameFiles/englishDictionary";
 import capitaliseWord from "../utils/capitaliseWord";
 import winAnimation from "../utils/winAnimation";
 
 export default function useGame(options: TGameOptions) {
-	const { answer, entityName, validWords, maxGuesses = 5, suggestions } = options;
+	const { answer, entityName, validWords, maxGuesses = 5, suggestions, characterLimit } = options;
+
 	const [wordSet, fuse, invalidWordMessage] = useMemo(() => {
 		switch (validWords) {
-			case "english-dictionary":
-				return [
-					new Set(englishDictionary),
-					suggestions ? new Fuse(englishDictionary, { includeScore: true }) : null,
-					`Only valid english words are allowed`,
-				];
 			case null:
 				return [null, null, null];
 			default:
@@ -31,7 +25,7 @@ export default function useGame(options: TGameOptions) {
 
 	const [knownMinLength, setKnownMinLength] = useState(0);
 	const [knownAnswerLength, setKnownAnswerLength] = useState<number | undefined>(undefined);
-	const maxSubmitLength = Math.min(knownAnswerLength || MAX_ANSWER_LENGTH);
+	const maxSubmitLength = Math.min(knownAnswerLength || characterLimit);
 
 	const [greenLetters, setGreenLetters] = useState<string[]>([]);
 	const [orangeLetters, setOrangeLetters] = useState<string[]>([]);
@@ -135,7 +129,7 @@ export default function useGame(options: TGameOptions) {
 		[currentGuess, setCurrentGuess, maxSubmitLength],
 	);
 
-	const charWidth = knownAnswerLength ? Math.max(...prevGuesses.map((m) => m.length)) : MAX_ANSWER_LENGTH;
+	const charWidth = knownAnswerLength ? Math.max(...prevGuesses.map((m) => m.length)) : characterLimit;
 
 	const gameRows = [...prevGuesses];
 	if (!gameState) {

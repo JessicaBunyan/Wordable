@@ -17,12 +17,18 @@ const StyledContainer = styled.span<{ $color?: string; $vanish?: boolean }>`
 	text-transform: uppercase;
 	font-weight: bold;
 	max-width: 2rem;
+	&:after {
+		/* content: "•"; */
+	}
 `;
 
 export default function Letter({ color, letter, vanish }: Props) {
+	const display = letter === " " ? "•" : letter;
+
 	return (
 		<StyledContainer $color={color} $vanish={vanish} aria-hidden={vanish}>
-			{letter}
+			{display}
+			{/* {letter} */}
 		</StyledContainer>
 	);
 }

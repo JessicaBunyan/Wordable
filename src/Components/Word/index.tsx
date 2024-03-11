@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { MAX_ANSWER_LENGTH } from "../GameInstance";
 import Letter from "../Letter";
 import styled from "styled-components";
 import EndMarker from "../EndMarker";
@@ -13,6 +12,7 @@ type Props = {
 	knownMaxLength?: number;
 	knownMinLength: number;
 	maxSubmitLength: number;
+	characterLimit: number;
 };
 
 const StyledWord = styled.div<{ $fraction: number; $fadeStart: number }>`
@@ -57,12 +57,13 @@ const Word = ({
 	knownMinLength,
 	charWidth,
 	maxSubmitLength,
+	characterLimit,
 }: Props) => {
 	const fadeStart = Math.max(knownMinLength, submittedWord.length, knownMaxLength || 0);
 
 	const letters = isCurrent
 		? getCurrentWordLetters(submittedWord, charWidth, maxSubmitLength)
-		: getSubmittedWordLetters(targetWord, submittedWord, charWidth);
+		: getSubmittedWordLetters(targetWord, submittedWord, charWidth, characterLimit);
 
 	return (
 		<StyledWord $fraction={100 / (charWidth + 1)} $fadeStart={fadeStart}>
@@ -95,12 +96,12 @@ function getCurrentWordLetters(guessedWord: string, charWidth: number, maxAnswer
 	return letters;
 }
 
-function getSubmittedWordLetters(targetWord: string, current: string, maxAnswerLength: number) {
+function getSubmittedWordLetters(targetWord: string, current: string, maxAnswerLength: number, characterLimit: number) {
 	const letters: ReactNode[] = [];
 
 	const potentialOranges: string[] = getPotentialOranges(targetWord, current);
 
-	for (let i = 0; i < MAX_ANSWER_LENGTH; i++) {
+	for (let i = 0; i < characterLimit; i++) {
 		const guessed = current[i];
 		const actual = targetWord[i];
 		let color = "rgb(150,150,150)";

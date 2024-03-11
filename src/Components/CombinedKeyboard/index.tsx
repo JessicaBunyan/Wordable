@@ -4,6 +4,8 @@ import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 
 type Props = {
+	validCharacters: string[];
+	keyboardLayout: { default: string[] };
 	disabled?: boolean;
 	handleBackspace: () => void;
 	handleLetter: (letter: string) => void;
@@ -18,6 +20,8 @@ type Props = {
 // `
 
 const CombinedKeyboard = ({
+	validCharacters,
+	keyboardLayout,
 	disabled = false,
 	handleBackspace,
 	handleLetter,
@@ -38,20 +42,18 @@ const CombinedKeyboard = ({
 				!disabled && handleEnter();
 				return;
 			}
-			if ("abcdefghijklmnopqrstuvwxyz".indexOf(e.key.toLowerCase()) !== -1) {
+			if (validCharacters.indexOf(e.key.toLowerCase()) !== -1) {
 				!disabled && handleLetter(e.key.toLowerCase());
 				return;
 			}
 		},
-		[handleBackspace, handleEnter, handleLetter, disabled],
+		[handleBackspace, handleEnter, handleLetter, disabled, validCharacters],
 	);
 
 	useEffect(() => {
 		document.addEventListener("keyup", handlePhysicalKeyUp);
 		return () => document.removeEventListener("keyup", handlePhysicalKeyUp);
 	}, [handlePhysicalKeyUp]);
-
-	const keyboardLayout = { default: ["q w e r t y u i o p", "a s d f g h j k l", "{bksp} z x c v b n m {enter}"] };
 
 	const onVirtualKeyboardPress = useCallback(
 		(button: string) => {
@@ -65,12 +67,17 @@ const CombinedKeyboard = ({
 				case "{bksp}":
 					handleBackspace();
 					return;
+				case "{space}":
+					handleLetter(" ");
+					return;
 				default:
 					handleLetter(button.toLowerCase());
 			}
 		},
 		[disabled, handleBackspace, handleEnter, handleLetter],
 	);
+
+	console.log(keyboardLayout);
 
 	const buttonThemes = [];
 	if (greens.length) {
@@ -98,9 +105,11 @@ const CombinedKeyboard = ({
 			theme="hg-theme-default keyboard"
 			layout={keyboardLayout}
 			onKeyPress={onVirtualKeyboardPress}
+			layoutName="default"
 			display={{
 				"{bksp}": "⌫",
 				"{enter}": "↵",
+				"{space}": "⎵",
 			}}
 			buttonTheme={buttonThemes}
 		/>
