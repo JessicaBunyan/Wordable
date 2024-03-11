@@ -25,6 +25,8 @@ export type TGameSetup = TGameSetupRecord & {
 	keyboardLayout: { default: string[] };
 };
 
+export const GLOBAL_MAX_LETTERS = 15;
+
 function App() {
 	const toastPosition = window.innerWidth <= 600 ? "top-center" : "bottom-right";
 
