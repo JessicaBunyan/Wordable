@@ -1,4 +1,3 @@
-import { specialChars } from "@testing-library/user-event";
 import { TGamePageRecord, TGameSetup } from "../App";
 import englishDictionary from "../GameFiles/englishDictionary";
 import getKeyboardLayout from "./getKeyboardLayout";
