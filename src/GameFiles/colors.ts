@@ -1,4 +1,6 @@
-const colors = [
+import { TGameSetupRecord } from "../App";
+
+const colourList = [
 	"red",
 	"orange",
 	"yellow",
@@ -25,4 +27,11 @@ const colors = [
 	"violet",
 ];
 
-export default colors;
+const colours: TGameSetupRecord = {
+	answers: colourList,
+	title: "Colourable",
+	validWords: "english-dictionary",
+	entityName: "colour",
+};
+
+export default colours;

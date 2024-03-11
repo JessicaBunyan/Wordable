@@ -1,4 +1,6 @@
-const pokemon = [
+import { TGameSetupRecord } from "../App";
+
+const pokemonList = [
 	"bulbasaur",
 	"ivysaur",
 	"venusaur",
@@ -151,4 +153,14 @@ const pokemon = [
 	"mewtwo",
 	"mew",
 ];
+
+const pokemon: TGameSetupRecord = {
+	answers: pokemonList,
+	title: "Pokémonable",
+	validWords: "answers",
+	entityName: "pokémon (1st gen)",
+	helpItems: ["Only valid pokemon are accepted", "All punctuation/symbols are removed (mrmime, farfetchd, nidoran)"],
+	suggestions: "to-answers",
+};
+
 export default pokemon;

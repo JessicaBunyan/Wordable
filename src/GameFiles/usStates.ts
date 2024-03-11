@@ -1,4 +1,6 @@
-const states = [
+import { TGameSetupRecord } from "../App";
+
+const statesList = [
 	"Alaska",
 	"Alabama",
 	"Arkansas",
@@ -51,5 +53,13 @@ const states = [
 	"West Virginia",
 	"Wyoming",
 ];
+
+const states: TGameSetupRecord = {
+	answers: statesList,
+	entityName: "US state",
+	title: "Stateable",
+	suggestions: "to-answers",
+	validWords: "answers",
+};
 
 export default states;

@@ -1,10 +1,10 @@
-import { TGamePageRecord, TGameSetup } from "../App";
+import { TGameSetupRecord, TGameSetup } from "../App";
 import englishDictionary from "../GameFiles/englishDictionary";
 import getKeyboardLayout from "./getKeyboardLayout";
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-export default function (record: TGamePageRecord): TGameSetup {
+export default function (record: TGameSetupRecord): TGameSetup {
 	record.answers = record.answers.map((a) => a.toLowerCase());
 
 	let validWords: string[] | null = null;
