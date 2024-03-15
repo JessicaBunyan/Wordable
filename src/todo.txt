@@ -12,3 +12,5 @@ wordwrap on the message line
 support for other characters?
 
 auto set page title/icon description etc
+
+potentially disable cors once its live

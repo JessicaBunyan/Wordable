@@ -1,3 +1,8 @@
+type HTTPError = {
+	code: number;
+	message: string;
+};
+
 type TGameSetupRecord = {
 	id: string;
 	answers: string[];
