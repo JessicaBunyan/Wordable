@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from "react";
-import { TGameOptions } from "../Components/GameInstance";
 
 import Fuse from "fuse.js";
 import toast from "react-hot-toast";

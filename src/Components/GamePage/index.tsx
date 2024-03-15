@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "react-simple-keyboard/build/css/index.css";
-import { TGameSetup } from "../../App";
 import randElement from "../../utils/randElement";
-import GameInstance, { TGameOptions } from "../GameInstance";
+import GameInstance from "../GameInstance";
 import HelpModal from "../HelpModal";
 import TopBar from "../TopBar";
 
@@ -11,6 +10,10 @@ const GamePage = (props: TGameSetup) => {
 	const [answer, setAnswer] = useState(randElement(answers));
 	const button = useRef<HTMLButtonElement>(null);
 	const [showHelp, setShowHelp] = useState(false);
+
+	useEffect(() => {
+		document.title = props.title;
+	}, [props.title]);
 
 	const options: TGameOptions = useMemo(() => {
 		return {

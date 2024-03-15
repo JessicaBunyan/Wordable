@@ -1,5 +1,3 @@
-import { TGameSetupRecord } from "../App";
-
 const statesList = [
 	"Alaska",
 	"Alabama",
@@ -54,6 +52,7 @@ const statesList = [
 ];
 
 const states: TGameSetupRecord = {
+	id: "states",
 	answers: statesList,
 	entityName: "US state",
 	title: "Stateable",

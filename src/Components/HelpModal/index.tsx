@@ -1,7 +1,5 @@
 import ReactModal from "react-modal";
 import styled from "styled-components";
-import { ReactNode } from "react";
-import { TGameOptions } from "../GameInstance";
 
 type Props = {
 	onClose: () => void;

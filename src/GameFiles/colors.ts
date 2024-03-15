@@ -1,5 +1,3 @@
-import { TGameSetupRecord } from "../App";
-
 const colourList = [
 	"red",
 	"orange",
@@ -28,6 +26,7 @@ const colourList = [
 ];
 
 const colours: TGameSetupRecord = {
+	id: "colours",
 	answers: colourList,
 	title: "Colourable",
 	validWords: "english-dictionary",

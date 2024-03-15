@@ -1,5 +1,3 @@
-import { TGameSetupRecord } from "../App";
-
 const pokemonList = [
 	"bulbasaur",
 	"ivysaur",
@@ -155,6 +153,7 @@ const pokemonList = [
 ];
 
 const pokemon: TGameSetupRecord = {
+	id: "pokemon",
 	answers: pokemonList,
 	title: "Pokémonable",
 	validWords: "answers",

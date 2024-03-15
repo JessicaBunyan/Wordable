@@ -1,10 +1,10 @@
-import { TGameSetupRecord, TGameSetup, GLOBAL_MAX_LETTERS } from "../App";
+import { GLOBAL_MAX_LETTERS } from "../App";
 import englishDictionary from "../GameFiles/englishDictionary";
 import getKeyboardLayout from "./getKeyboardLayout";
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-export default function (record: TGameSetupRecord): TGameSetup {
+export default function processSetupRecord(record: TGameSetupRecord): TGameSetup {
 	const omittedAnswers = record.answers.filter((a) => a.length > GLOBAL_MAX_LETTERS);
 	const helpItems = [...(record.helpItems || [])];
 	const answers = record.answers.filter((a) => a.length <= GLOBAL_MAX_LETTERS).map((a) => a.toLowerCase());
@@ -34,6 +34,7 @@ export default function (record: TGameSetupRecord): TGameSetup {
 	const keyboardLayout = getKeyboardLayout(specialCharacters);
 
 	return {
+		id: record.id,
 		title: record.title,
 		icon: record.icon,
 		entityName: record.entityName,

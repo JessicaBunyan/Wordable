@@ -3,10 +3,6 @@ import styled from "styled-components";
 import useGame from "../../Hooks/useGame";
 import CombinedKeyboard from "../CombinedKeyboard";
 import Word from "../Word";
-import { TGameSetup } from "../../App";
-
-export type TValidWords = string[] | null;
-export type TGameOptions = TGameSetup & { answer: string };
 
 type TProps = {
 	options: TGameOptions;

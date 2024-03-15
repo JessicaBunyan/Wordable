@@ -1,5 +1,3 @@
-import { TGameSetupRecord } from "../App";
-
 const list = [
 	"Albania",
 	"Latvia",
@@ -52,6 +50,7 @@ const list = [
 ];
 
 const europeanCountries: TGameSetupRecord = {
+	id: "europeanCountries",
 	answers: list,
 	entityName: "European Country",
 	title: "Europable",
