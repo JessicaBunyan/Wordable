@@ -3,22 +3,27 @@ type HTTPError = {
 	message: string;
 };
 
-type TGameSetupRecord = {
+type TGameSetupRecord = TCommonGameSetup & {
+	validWords: string[] | null | "answers" | "english-dictionary";
+};
+
+type TCommonGameSetup = {
+	suggestions?: null | "to-answers";
+	helpItems?: string[];
+	entityName: string;
 	id: string;
 	answers: string[];
 	title: string;
 	icon?: string;
 	maxGuesses?: number;
-	validWords: TValidWords | "answers" | "english-dictionary";
-	entityName: string;
-	helpItems?: string[];
-	suggestions?: null | "to-answers";
 };
 
-type TGameSetup = TGameSetupRecord & {
+type TGameSetup = TCommonGameSetup & {
 	characterLimit: number;
 	validCharacters: string[];
-	validWords: TValidWords;
+	invalidWordMessage: string;
+	wordSet?: Set<string>;
+	fuse?: import("fuse.js").default<string>;
 	keyboardLayout: { default: string[] };
 };
 

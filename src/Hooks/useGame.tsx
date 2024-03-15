@@ -1,26 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 
-import Fuse from "fuse.js";
 import toast from "react-hot-toast";
 import "react-simple-keyboard/build/css/index.css";
 import capitaliseWord from "../utils/capitaliseWord";
 import winAnimation from "../utils/winAnimation";
 
 export default function useGame(options: TGameOptions) {
-	const { answer, entityName, validWords, maxGuesses = 5, suggestions, characterLimit } = options;
-
-	const [wordSet, fuse, invalidWordMessage] = useMemo(() => {
-		switch (validWords) {
-			case null:
-				return [null, null, null];
-			default:
-				return [
-					new Set(validWords),
-					suggestions ? new Fuse(validWords, { threshold: 0.25 }) : null,
-					`Only valid ${entityName} names are allowed`,
-				];
-		}
-	}, [validWords, entityName, suggestions]);
+	const { answer, fuse, entityName, wordSet, invalidWordMessage, maxGuesses = 5, characterLimit } = options;
 
 	const [knownMinLength, setKnownMinLength] = useState(0);
 	const [knownAnswerLength, setKnownAnswerLength] = useState<number | undefined>(undefined);
@@ -78,7 +64,6 @@ export default function useGame(options: TGameOptions) {
 				}
 			}
 			toast.error(invalidWordMessage);
-			return;
 		}
 		if (prevGuesses.indexOf(currentGuess) !== -1) {
 			toast.error("Already guessed that!");
