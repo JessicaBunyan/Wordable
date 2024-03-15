@@ -1,10 +1,12 @@
 import ReactModal from "react-modal";
-import { MAX_ANSWER_LENGTH } from "../Game";
 import styled from "styled-components";
+import { ReactNode } from "react";
+import { TGameOptions } from "../GameInstance";
 
 type Props = {
 	onClose: () => void;
 	isOpen: boolean;
+	gameOptions: TGameOptions;
 };
 
 const StyledButton = styled.button`
@@ -20,7 +22,8 @@ const StyledLi = styled.li`
 	margin: 1rem;
 `;
 
-function HelpModal({ isOpen, onClose }: Props) {
+function HelpModal({ isOpen, onClose, gameOptions }: Props) {
+	const { helpItems = [] } = gameOptions;
 	return (
 		<ReactModal isOpen={isOpen}>
 			<StyledButton onClick={onClose}>✖</StyledButton>
@@ -34,10 +37,10 @@ function HelpModal({ isOpen, onClose }: Props) {
 				<StyledLi>This is in beta</StyledLi>
 				<StyledLi>If the number goes green your guess was the correct length</StyledLi>
 				<StyledLi>Reset will give you a new word</StyledLi>
-				<StyledLi>Only valid pokemon are accepted</StyledLi>
-				<StyledLi>Answers can be any length from 3-{MAX_ANSWER_LENGTH} chars</StyledLi>
-
-				<StyledLi>All punctuation/symbols are removed (mrmime, farfetchd, nidoran)</StyledLi>
+				<StyledLi>Answers can be any length from 3-{gameOptions.characterLimit} chars</StyledLi>
+				{helpItems.map((h, index) => (
+					<StyledLi key={index}>{h}</StyledLi>
+				))}
 			</ul>
 		</ReactModal>
 	);

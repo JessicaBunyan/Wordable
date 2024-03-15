@@ -3,12 +3,14 @@ import styled from "styled-components";
 import useGame from "../../Hooks/useGame";
 import CombinedKeyboard from "../CombinedKeyboard";
 import Word from "../Word";
+import { TGameSetup } from "../../App";
 
-export const MAX_ANSWER_LENGTH = 10;
+export type TValidWords = string[] | null;
+export type TGameOptions = TGameSetup & { answer: string };
 
-export type TValidWords = string[] | "english-dictionary" | null;
-export type TGameOptions = { answer: string; maxGuesses?: number; validWords: TValidWords };
-
+type TProps = {
+	options: TGameOptions;
+};
 const StyledWordRacks = styled.div`
 	padding: 0.25rem;
 	font-size: 2rem;
@@ -22,10 +24,13 @@ const StyledWordRacks = styled.div`
 const StyledInstruction = styled.h2`
 	font-size: 1.5rem;
 	font-weight: bold;
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.25rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75rem;
 `;
 
-const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
+const GameInstance = (props: TProps) => {
 	const {
 		gameRows,
 		charWidth,
@@ -40,7 +45,9 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 		greenLetters,
 		greyLetters,
 		message,
-	} = useGame(validWords, answer, maxGuesses);
+	} = useGame(props.options);
+
+	const { validCharacters, keyboardLayout } = props.options;
 
 	return (
 		<div id="game">
@@ -51,11 +58,12 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 						index={index}
 						isCurrent={index === gameRows.length - 1 && !gameState}
 						submittedWord={guess}
-						targetWord={answer}
+						targetWord={props.options.answer}
 						charWidth={charWidth}
 						knownMinLength={knownMinLength}
 						knownMaxLength={knownAnswerLength}
 						maxSubmitLength={maxSubmitLength}
+						characterLimit={props.options.characterLimit}
 					/>
 				))}
 			</StyledWordRacks>
@@ -63,6 +71,8 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 			<StyledInstruction>{message}</StyledInstruction>
 
 			<CombinedKeyboard
+				validCharacters={validCharacters}
+				keyboardLayout={keyboardLayout}
 				disabled={gameState !== ""}
 				handleEnter={handleSubmit}
 				handleBackspace={handleBackspace}
@@ -74,4 +84,4 @@ const Game = ({ answer, maxGuesses = 5, validWords = null }: TGameOptions) => {
 		</div>
 	);
 };
-export default Game;
+export default GameInstance;

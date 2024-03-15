@@ -1,6 +1,12 @@
+double check mobile experience
+tests
 
-mobile experience
+add auto removal of special characters/spaces/length checking etc in the given word lists
 
-general styling
-cleanup code interface for use with different wordlists etc
+add navigation page
 
+general styling of page outside the app
+
+wordwrap on the message line 
+
+support for other characters?
