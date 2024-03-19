@@ -1,10 +1,10 @@
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CreatePage from "./Components/CreatePage";
-import GamePage from "./Components/GamePage";
-import processSetupRecord from "./utils/processSetupRecord";
-import premadeGames from "./GameFiles/premadeGames";
 import LoadGame from "./Components/LoadGame";
+import { premadeGames } from "./GameFiles/premadeGames";
+import HomePage from "./Components/HomePage";
+import StaticGameLoader from "./Components/StaticGameLoader";
 
 export const GLOBAL_MAX_LETTERS = 15;
 
@@ -15,14 +15,11 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/create" element={<CreatePage />}></Route>
-				{premadeGames.map((gameSetup) => (
-					<Route
-						key={gameSetup.id}
-						path={`/${gameSetup.id}`}
-						element={<GamePage {...processSetupRecord(gameSetup)} />}
-					/>
+				{premadeGames.map(({ id }) => (
+					<Route key={id} path={`/${id}`} element={<StaticGameLoader id={id} />} />
 				))}
 				<Route path="/:gameID" element={<LoadGame />} />
+				<Route path="/" element={<HomePage />}></Route>
 			</Routes>
 			<Toaster
 				toastOptions={{
