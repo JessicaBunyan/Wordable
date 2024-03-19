@@ -64,6 +64,7 @@ export default function useGame(options: TGameOptions) {
 				}
 			}
 			toast.error(invalidWordMessage);
+			return;
 		}
 		if (prevGuesses.indexOf(currentGuess) !== -1) {
 			toast.error("Already guessed that!");
