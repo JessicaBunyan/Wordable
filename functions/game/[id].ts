@@ -7,10 +7,10 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
 	const value = await tryGet(kv, context.params.id as string);
 	if (value) {
-		return new Response(value);
+		return new Response(value, { headers: { "Content-Type": "application/json" } });
 	}
 
-	return new Response("no such key with this ID", { status: 404 });
+	return new Response(JSON.stringify({ error: "no such key with this ID" }), { status: 404 });
 };
 
 export const tryGet = async (kv: KVNamespace, key: string, _default = "") => {

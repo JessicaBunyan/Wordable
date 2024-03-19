@@ -1,0 +1,1 @@
+function validateGame(record: GameSetupRecord) {}

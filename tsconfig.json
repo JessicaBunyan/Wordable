@@ -3,7 +3,7 @@
 		"target": "es2015",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": true,
-		"skipLibCheck": true,
+		"skipLibCheck": false,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
@@ -16,6 +16,6 @@
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
-	"include": ["src", "functions"],
+	"include": ["src", "functions", "types.d.ts"],
 	"exclude": ["functions/**/*"]
 }
