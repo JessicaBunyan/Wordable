@@ -1,0 +1,37 @@
+.letter {
+	flex-basis: 0rem;
+	flex-grow: 1;
+	margin-right: 4px;
+	background: rgb(150, 150, 150);
+	/* flex-grow: ${(props) => (props.$vanish ? 0.0001 : 1)}; */
+	/* margin-right: ${(props) => (props.$vanish ? 0 : "4px")}; */
+	transition: flex-grow 300ms ease-out;
+	/* background: ${(props) => props.$color}; */
+	text-transform: uppercase;
+	font-weight: bold;
+	max-width: 2rem;
+	&:after {
+		/* content: "•"; */
+	}
+
+	&.invisible {
+		background: white;
+		background-color: var(--white);
+	}
+	&.nonExistent {
+		margin-right: 0;
+		flex-grow: 0.000001;
+	}
+	&.correct {
+		background-color: var(--green);
+	}
+	&.misplaced {
+		background-color: var(--orange);
+	}
+	&.incorrect {
+		background-color: var(--grey);
+	}
+	&.default {
+		background-color: var(--grey);
+	}
+}

@@ -1,11 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-
-const StyledLoader = styled.div``;
-
 const Loader = () => {
 	return (
-		<StyledLoader>
+		<div>
 			<svg width="57" height="57" viewBox="0 0 57 57" xmlns="http://www.w3.org/2000/svg" stroke="#000">
 				<g fill="none" fillRule="evenodd">
 					<g transform="translate(1 1)" strokeWidth="2">
@@ -72,7 +67,7 @@ const Loader = () => {
 					</g>
 				</g>
 			</svg>
-		</StyledLoader>
+		</div>
 	);
 };
 

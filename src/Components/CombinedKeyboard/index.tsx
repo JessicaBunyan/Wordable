@@ -15,10 +15,6 @@ type Props = {
 	greys: string[];
 };
 
-// const StyledKeyboardContainer = styled.div`
-
-// `
-
 const CombinedKeyboard = ({
 	validCharacters,
 	keyboardLayout,
@@ -30,8 +26,6 @@ const CombinedKeyboard = ({
 	oranges,
 	greys,
 }: Props) => {
-	// const keyboard = useRef<SimpleKeyboard>();
-
 	const handlePhysicalKeyUp = useCallback(
 		(e: KeyboardEvent) => {
 			if (e.code === "Backspace") {

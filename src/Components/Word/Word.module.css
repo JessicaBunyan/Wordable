@@ -1,0 +1,28 @@
+@keyframes appear {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+.word {
+	display: flex;
+	height: 3rem;
+	line-height: 3rem;
+	font-size: 1.5rem;
+	margin: 4px;
+	opacity: 0;
+	animation: appear ease-out 300ms 300ms forwards;
+	position: relative;
+}
+
+.shield {
+	position: absolute;
+	content: "";
+	height: 100%;
+	top: 0;
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 1) 100%);
+	background-repeat: no-repeat;
+	background-size: cover;
+}

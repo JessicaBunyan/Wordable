@@ -29,3 +29,5 @@ type TGameSetup = TCommonGameSetup & {
 
 type TValidWords = string[] | null;
 type TGameOptions = TGameSetup & { answer: string };
+
+type TLetterState = "invisible" | "nonExistent" | "correct" | "misplaced" | "incorrect" | "default";

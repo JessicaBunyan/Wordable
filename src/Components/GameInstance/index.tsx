@@ -1,5 +1,5 @@
 import "react-simple-keyboard/build/css/index.css";
-import styled from "styled-components";
+import styles from "./GameInstance.module.css";
 import useGame from "../../Hooks/useGame";
 import CombinedKeyboard from "../CombinedKeyboard";
 import Word from "../Word";
@@ -7,24 +7,6 @@ import Word from "../Word";
 type TProps = {
 	options: TGameOptions;
 };
-const StyledWordRacks = styled.div`
-	padding: 0.25rem;
-	font-size: 2rem;
-	display: flex;
-	flex-direction: column;
-	gap: 0.2rem;
-	height: 22rem;
-	flex-grow: 1;
-`;
-
-const StyledInstruction = styled.h2`
-	font-size: 1.5rem;
-	font-weight: bold;
-	margin-bottom: 0.25rem;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	height: 1.75rem;
-`;
 
 const GameInstance = (props: TProps) => {
 	const {
@@ -47,7 +29,7 @@ const GameInstance = (props: TProps) => {
 
 	return (
 		<div id="game">
-			<StyledWordRacks>
+			<div className={styles.wordRack}>
 				{gameRows.map((guess, index) => (
 					<Word
 						key={index}
@@ -62,9 +44,9 @@ const GameInstance = (props: TProps) => {
 						characterLimit={props.options.characterLimit}
 					/>
 				))}
-			</StyledWordRacks>
+			</div>
 
-			<StyledInstruction>{message}</StyledInstruction>
+			<h2 className={styles.message}>{message}</h2>
 
 			<CombinedKeyboard
 				validCharacters={validCharacters}
