@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
+import styles from "./Word.module.css";
 import Letter from "../Letter";
-import styled from "styled-components";
 import EndMarker from "../EndMarker";
 
 type Props = {
@@ -15,40 +15,6 @@ type Props = {
 	characterLimit: number;
 };
 
-const StyledWord = styled.div<{ $fraction: number; $fadeStart: number }>`
-	@keyframes appear {
-		0% {
-			opacity: 0;
-		}
-		100% {
-			opacity: 1;
-		}
-	}
-
-	display: flex;
-	/* width: 100%; */
-	height: 3rem;
-	line-height: 3rem;
-	font-size: 1.5rem;
-	margin: 4px;
-	opacity: 0;
-	animation: appear ease-out 300ms 300ms forwards;
-	position: relative;
-
-	&:after {
-		position: absolute;
-		/* display: ${(props) => (props.$fadeStart ? "none" : "block")}; */
-		content: "";
-		height: 100%;
-		top: 0;
-		left: ${(props) => props.$fraction * props.$fadeStart + "%"};
-		width: ${(props) => `calc(${100 - props.$fraction * props.$fadeStart}% - 2rem)`};
-		background-image: linear-gradient(to right, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 1) 100%);
-		background-repeat: no-repeat;
-		background-size: cover;
-	}
-`;
-
 const Word = ({
 	isCurrent,
 	targetWord,
@@ -60,13 +26,18 @@ const Word = ({
 	characterLimit,
 }: Props) => {
 	const fadeStart = Math.max(knownMinLength, submittedWord.length, knownMaxLength || 0);
+	const fraction = 90 / charWidth; // TODO a bit dependent on the screen width
 
 	const letters = isCurrent
 		? getCurrentWordLetters(submittedWord, charWidth, maxSubmitLength)
 		: getSubmittedWordLetters(targetWord, submittedWord, charWidth, characterLimit);
 
+	const customStyles = {
+		left: fraction * fadeStart + "%",
+		width: `calc(${100 - fraction * fadeStart}% - 2rem)`,
+	};
 	return (
-		<StyledWord $fraction={100 / (charWidth + 1)} $fadeStart={fadeStart}>
+		<div className={styles.word}>
 			{letters}
 			<EndMarker
 				guessedWord={submittedWord}
@@ -74,7 +45,8 @@ const Word = ({
 				targetWord={targetWord}
 				knownMaxLength={knownMaxLength}
 			/>
-		</StyledWord>
+			<span className={styles.shield} style={customStyles} />
+		</div>
 	);
 	// if (props.isCurrent)
 	// letters {
@@ -89,9 +61,9 @@ function getCurrentWordLetters(guessedWord: string, charWidth: number, maxAnswer
 
 	for (let i = 0; i < charWidth; i++) {
 		const guess = guessedWord[i];
-		const color = i >= maxAnswerLength ? "white" : "rgb(150,150,150)";
+		const state: TLetterState = i >= maxAnswerLength ? "invisible" : "default";
 		// let border = "none"; //"solid 1px var(--border)";
-		letters.push(<Letter index={i} key={i} color={color} letter={guess} />);
+		letters.push(<Letter index={i} key={i} state={state} letter={guess} />);
 	}
 	return letters;
 }
@@ -104,21 +76,21 @@ function getSubmittedWordLetters(targetWord: string, current: string, maxAnswerL
 	for (let i = 0; i < characterLimit; i++) {
 		const guessed = current[i];
 		const actual = targetWord[i];
-		let color = "rgb(150,150,150)";
+		let state: TLetterState = "default";
 		if (!guessed) {
-			letters.push(<Letter index={i} key={i} color={"white"} letter={""} vanish={i >= maxAnswerLength} />);
+			letters.push(<Letter index={i} key={i} state={i >= maxAnswerLength ? "nonExistent" : "invisible"} letter={""} />);
 			continue;
 		}
 		if (guessed === actual) {
-			color = "var(--green)";
+			state = "correct";
 		} else if (targetWord.indexOf(guessed) > -1 && potentialOranges.find((l) => l === guessed)) {
-			color = "var(--orange)";
+			state = "misplaced";
 			potentialOranges.splice(
 				potentialOranges.findIndex((l) => l === guessed),
 				1,
 			);
 		}
-		letters.push(<Letter index={i} key={i} color={color} letter={current[i]} />);
+		letters.push(<Letter index={i} key={i} state={state} letter={current[i]} />);
 	}
 	return letters;
 }

@@ -25,13 +25,11 @@ export default function processSetupRecord(record: TGameSetupRecord): TGameSetup
 	processed.answers = record.answers.filter((a) => a.length <= GLOBAL_MAX_LETTERS).map((a) => a.toLowerCase());
 
 	const helpItems = [...(record.helpItems || [])];
-	console.log(omittedAnswers);
 	omittedAnswers.length &&
 		helpItems.push(
 			"The following answers are excluded from the possible answer set due to length: " + omittedAnswers.join(", "),
 		);
 
-	console.log(helpItems);
 	processed.characterLimit = processed.answers.reduce((max, curr) => Math.max(curr.length, max), 0);
 
 	let wordList: string[] | null = null;

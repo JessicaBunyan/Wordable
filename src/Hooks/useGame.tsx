@@ -8,7 +8,7 @@ import winAnimation from "../utils/winAnimation";
 export default function useGame(options: TGameOptions) {
 	const { answer, fuse, entityName, wordSet, invalidWordMessage, maxGuesses = 5, characterLimit } = options;
 
-	const [knownMinLength, setKnownMinLength] = useState(0);
+	const [knownMinLength, setKnownMinLength] = useState(3);
 	const [knownAnswerLength, setKnownAnswerLength] = useState<number | undefined>(undefined);
 	const maxSubmitLength = Math.min(knownAnswerLength || characterLimit);
 
