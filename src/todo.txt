@@ -16,3 +16,7 @@ auto set page title/icon description etc
 potentially disable cors once its live
 
 don't suggest words which are over character limit
+
+disable input during animation
+
+fix keyboard animation

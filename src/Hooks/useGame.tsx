@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import "react-simple-keyboard/build/css/index.css";
 import capitaliseWord from "../utils/capitaliseWord";
 import winAnimation from "../utils/winAnimation";
+import uniqueLettersInWord from "../utils/uniqueLettersInWord";
 
 export default function useGame(options: TGameOptions) {
 	const { answer, fuse, entityName, wordSet, invalidWordMessage, maxGuesses = 5, characterLimit } = options;
@@ -12,9 +13,10 @@ export default function useGame(options: TGameOptions) {
 	const [knownAnswerLength, setKnownAnswerLength] = useState<number | undefined>(undefined);
 	const maxSubmitLength = Math.min(knownAnswerLength || characterLimit);
 
-	const [greenLetters, setGreenLetters] = useState<string[]>([]);
-	const [orangeLetters, setOrangeLetters] = useState<string[]>([]);
-	const [greyLetters, setGreyLetters] = useState<string[]>([]);
+	const [currentWordLetters, setCurrentWordLetters] = useState<string[]>([]);
+	const [correctLetters, setCorrectLetters] = useState<string[]>([]);
+	const [misplacedLetters, setMisplacedLetters] = useState<string[]>([]);
+	const [incorrectlyGuessedLetters, setIncorrectLetters] = useState<string[]>([]);
 	const [currentGuess, setCurrentGuess] = useState("");
 	const [gameState, setGameState] = useState<"WIN" | "LOSS" | "">("");
 	const [prevGuesses, setPrevGuesses] = useState<Array<string>>([]);
@@ -33,9 +35,9 @@ export default function useGame(options: TGameOptions) {
 
 	const updateKeyboardColours = useCallback(
 		(guess: string, target: string) => {
-			const greens = new Set(greenLetters);
-			const oranges = new Set(orangeLetters);
-			const greys = new Set(greyLetters);
+			const greens = new Set(correctLetters);
+			const oranges = new Set(misplacedLetters);
+			const greys = new Set(incorrectlyGuessedLetters);
 
 			for (let i = 0; i < guess.length; i++) {
 				if (guess.charAt(i) === target.charAt(i)) {
@@ -48,11 +50,18 @@ export default function useGame(options: TGameOptions) {
 					}
 				}
 			}
-			setOrangeLetters(Array.from(oranges));
-			setGreenLetters(Array.from(greens));
-			setGreyLetters(Array.from(greys));
+			setMisplacedLetters(Array.from(oranges));
+			setCorrectLetters(Array.from(greens));
+			setIncorrectLetters(Array.from(greys));
 		},
-		[greenLetters, orangeLetters, greyLetters, setGreyLetters, setOrangeLetters, setGreenLetters],
+		[
+			correctLetters,
+			misplacedLetters,
+			incorrectlyGuessedLetters,
+			setIncorrectLetters,
+			setMisplacedLetters,
+			setCorrectLetters,
+		],
 	);
 
 	const handleSubmit = useCallback(() => {
@@ -84,6 +93,7 @@ export default function useGame(options: TGameOptions) {
 		} else if (prevGuesses.length >= maxGuesses) {
 			setGameState("LOSS");
 		}
+		setCurrentWordLetters([]);
 	}, [
 		setPrevGuesses,
 		setCurrentGuess,
@@ -94,6 +104,7 @@ export default function useGame(options: TGameOptions) {
 		currentGuess,
 		prevGuesses,
 		calculateKnownMinLength,
+		setCurrentWordLetters,
 		updateKeyboardColours,
 		fuse,
 		maxSubmitLength,
@@ -102,16 +113,18 @@ export default function useGame(options: TGameOptions) {
 
 	const handleBackspace = useCallback(() => {
 		const updated = currentGuess.substring(0, currentGuess.length - 1);
+		setCurrentWordLetters(uniqueLettersInWord(updated));
 		setCurrentGuess(updated);
 	}, [currentGuess, setCurrentGuess]);
 
 	const handleLetter = useCallback(
 		(letter: string) => {
 			if (currentGuess.length < maxSubmitLength) {
+				setCurrentWordLetters(uniqueLettersInWord(currentGuess + letter));
 				setCurrentGuess(currentGuess + letter);
 			}
 		},
-		[currentGuess, setCurrentGuess, maxSubmitLength],
+		[currentGuess, setCurrentGuess, maxSubmitLength, setCurrentWordLetters],
 	);
 
 	const charWidth = knownAnswerLength ? Math.max(...prevGuesses.map((m) => m.length)) : characterLimit;
@@ -163,9 +176,10 @@ export default function useGame(options: TGameOptions) {
 		handleSubmit,
 		handleBackspace,
 		handleLetter,
-		orangeLetters,
-		greenLetters,
-		greyLetters,
+		misplacedLetters,
+		correctLetters,
+		incorrectlyGuessedLetters,
+		currentWordLetters,
 		message,
 	};
 }

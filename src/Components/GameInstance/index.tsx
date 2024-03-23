@@ -3,12 +3,14 @@ import styles from "./GameInstance.module.css";
 import useGame from "../../Hooks/useGame";
 import CombinedKeyboard from "../CombinedKeyboard";
 import Word from "../Word";
+import getFlipDuration from "../../utils/getFlipDuration";
 
 type TProps = {
 	options: TGameOptions;
 };
 
 const GameInstance = (props: TProps) => {
+	// props.options.answer = "rattata";
 	const {
 		gameRows,
 		charWidth,
@@ -19,13 +21,18 @@ const GameInstance = (props: TProps) => {
 		handleSubmit,
 		handleBackspace,
 		handleLetter,
-		orangeLetters,
-		greenLetters,
-		greyLetters,
+		misplacedLetters,
+		correctLetters,
+		incorrectlyGuessedLetters,
+		currentWordLetters,
 		message,
 	} = useGame(props.options);
 
 	const { validCharacters, keyboardLayout } = props.options;
+
+	const flipDuration = getFlipDuration();
+	const keyboardTransitionDelay =
+		gameRows.length >= 2 ? `${gameRows[gameRows.length - 2].length * flipDuration}ms` : "0ms";
 
 	return (
 		<div id="game">
@@ -42,23 +49,27 @@ const GameInstance = (props: TProps) => {
 						knownMaxLength={knownAnswerLength}
 						maxSubmitLength={maxSubmitLength}
 						characterLimit={props.options.characterLimit}
+						style={{ animationDelay: index ? `${gameRows[index - 1].length * flipDuration}ms` : "0ms" }}
 					/>
 				))}
 			</div>
 
 			<h2 className={styles.message}>{message}</h2>
-
-			<CombinedKeyboard
-				validCharacters={validCharacters}
-				keyboardLayout={keyboardLayout}
-				disabled={gameState !== ""}
-				handleEnter={handleSubmit}
-				handleBackspace={handleBackspace}
-				handleLetter={handleLetter}
-				greens={greenLetters}
-				oranges={orangeLetters}
-				greys={greyLetters}
-			/>
+			{/* // TODO this isnt working due to react keyboard creating whole new letters  */}
+			<div style={{ transitionDelay: keyboardTransitionDelay }}>
+				<CombinedKeyboard
+					validCharacters={validCharacters}
+					keyboardLayout={keyboardLayout}
+					disabled={gameState !== ""}
+					handleEnter={handleSubmit}
+					handleBackspace={handleBackspace}
+					handleLetter={handleLetter}
+					correctLetters={correctLetters}
+					misplacedLetters={misplacedLetters}
+					incorrectLetters={incorrectlyGuessedLetters}
+					currentGuessLetters={currentWordLetters}
+				/>
+			</div>
 		</div>
 	);
 };

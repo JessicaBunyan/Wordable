@@ -1,5 +1,5 @@
 .nav {
-	border-bottom: solid 4px black;
+	border-bottom: solid 4px var(--text);
 	width: 100%;
 	display: flex;
 	height: var(--top-bar-height);

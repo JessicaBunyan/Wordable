@@ -3,6 +3,7 @@ import "./reset.css";
 import "./base.css";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import "./animations.css";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 

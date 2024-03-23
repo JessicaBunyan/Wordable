@@ -3,6 +3,13 @@
 	text-transform: uppercase;
 	font-weight: bold;
 	height: 11.75rem;
+	background: unset;
+	transition: background-color;
+	transition-duration: 10000ms;
+	transition-delay: inherit !important;
+}
+.keyboard * {
+	transition: inherit !important;
 }
 
 .keyboard .hg-rows {
@@ -16,16 +23,23 @@
 
 .keyboard .hg-button {
 	height: 100%;
+	background-color: var(--keyboard-key);
+
+	box-shadow: none;
+	border: none;
+	outline: none;
 }
 
-.keyboard .grey {
-	background-color: var(--grey);
+.keyboard .incorrect {
+	background-color: var(--incorrect);
+}
+.keyboard .misplaced {
+	background-color: var(--misplaced);
 }
 
-.keyboard .orange {
-	background-color: var(--orange);
+.keyboard .correct {
+	background-color: var(--correct);
 }
-
-.keyboard .green {
-	background-color: var(--green);
+.keyboard .currentGuess {
+	/* background-color: var(--default); */
 }

@@ -11,7 +11,7 @@ type Props = {
 function HelpModal({ isOpen, onClose, gameOptions }: Props) {
 	const { helpItems = [] } = gameOptions;
 	return (
-		<ReactModal className={styles.help} isOpen={isOpen}>
+		<ReactModal className={styles.help} isOpen={isOpen} overlayClassName={styles.helpOverlay}>
 			<button onClick={onClose}>✖</button>
 			<h1
 				style={{

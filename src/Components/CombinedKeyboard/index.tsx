@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import "./keyboard.css";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
@@ -10,9 +10,11 @@ type Props = {
 	handleBackspace: () => void;
 	handleLetter: (letter: string) => void;
 	handleEnter: () => void;
-	greens: string[];
-	oranges: string[];
-	greys: string[];
+	correctLetters: string[];
+	misplacedLetters: string[];
+	incorrectLetters: string[];
+	currentGuessLetters: string[];
+	// style: React.CSSProperties;
 };
 
 const CombinedKeyboard = ({
@@ -22,10 +24,12 @@ const CombinedKeyboard = ({
 	handleBackspace,
 	handleLetter,
 	handleEnter,
-	greens,
-	oranges,
-	greys,
-}: Props) => {
+	correctLetters,
+	misplacedLetters,
+	incorrectLetters,
+	currentGuessLetters,
+}: // style,
+Props) => {
 	const handlePhysicalKeyUp = useCallback(
 		(e: KeyboardEvent) => {
 			if (e.code === "Backspace") {
@@ -72,22 +76,28 @@ const CombinedKeyboard = ({
 	);
 
 	const buttonThemes = [];
-	if (greens.length) {
+	if (correctLetters.length) {
 		buttonThemes.push({
-			buttons: greens.join(" "),
-			class: "green",
+			buttons: correctLetters.join(" "),
+			class: "correct",
 		});
 	}
-	if (oranges.length) {
+	if (misplacedLetters.length) {
 		buttonThemes.push({
-			buttons: oranges.join(" "),
-			class: "orange",
+			buttons: misplacedLetters.join(" "),
+			class: "misplaced",
 		});
 	}
-	if (greys.length) {
+	if (incorrectLetters.length) {
 		buttonThemes.push({
-			buttons: greys.join(" "),
-			class: "grey",
+			buttons: incorrectLetters.join(" "),
+			class: "incorrect",
+		});
+	}
+	if (currentGuessLetters.length) {
+		buttonThemes.push({
+			buttons: currentGuessLetters.join(" "),
+			class: "currentGuess",
 		});
 	}
 
@@ -107,4 +117,4 @@ const CombinedKeyboard = ({
 	);
 };
 
-export default CombinedKeyboard;
+export default memo(CombinedKeyboard);

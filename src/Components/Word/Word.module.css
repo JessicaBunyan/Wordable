@@ -1,4 +1,4 @@
-@keyframes appear {
+@keyframes fadeIn {
 	0% {
 		opacity: 0;
 	}
@@ -13,7 +13,7 @@
 	font-size: 1.5rem;
 	margin: 4px;
 	opacity: 0;
-	animation: appear ease-out 300ms 300ms forwards;
+	animation: fadeIn ease-out 300ms 0ms forwards;
 	position: relative;
 }
 
@@ -22,7 +22,13 @@
 	content: "";
 	height: 100%;
 	top: 0;
-	background-image: linear-gradient(to right, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 1) 100%);
+	background-image: linear-gradient(
+		to right,
+		color-mix(in srgb, var(--app-background) 0.1%, transparent) 0%,
+		color-mix(in srgb, var(--app-background) 100%, transparent) 100%
+	);
 	background-repeat: no-repeat;
 	background-size: cover;
+	/* background: color-mix(in srgb, var(--app-background) 50%, transparent); */
+	z-index: 99;
 }

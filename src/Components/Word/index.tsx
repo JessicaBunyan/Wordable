@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
-import styles from "./Word.module.css";
-import Letter from "../Letter";
 import EndMarker from "../EndMarker";
+import Letter from "../Letter";
+import styles from "./Word.module.css";
 
 type Props = {
 	index: number;
@@ -13,6 +13,7 @@ type Props = {
 	knownMinLength: number;
 	maxSubmitLength: number;
 	characterLimit: number;
+	style?: React.CSSProperties;
 };
 
 const Word = ({
@@ -24,6 +25,7 @@ const Word = ({
 	charWidth,
 	maxSubmitLength,
 	characterLimit,
+	style,
 }: Props) => {
 	const fadeStart = Math.max(knownMinLength, submittedWord.length, knownMaxLength || 0);
 	const fraction = 90 / charWidth; // TODO a bit dependent on the screen width
@@ -36,8 +38,9 @@ const Word = ({
 		left: fraction * fadeStart + "%",
 		width: `calc(${100 - fraction * fadeStart}% - 2rem)`,
 	};
+
 	return (
-		<div className={styles.word}>
+		<div className={styles.word} style={style}>
 			{letters}
 			<EndMarker
 				guessedWord={submittedWord}
@@ -76,7 +79,7 @@ function getSubmittedWordLetters(targetWord: string, current: string, maxAnswerL
 	for (let i = 0; i < characterLimit; i++) {
 		const guessed = current[i];
 		const actual = targetWord[i];
-		let state: TLetterState = "default";
+		let state: TLetterState = "incorrect";
 		if (!guessed) {
 			letters.push(<Letter index={i} key={i} state={i >= maxAnswerLength ? "nonExistent" : "invisible"} letter={""} />);
 			continue;

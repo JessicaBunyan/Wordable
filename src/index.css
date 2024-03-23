@@ -1,13 +1,35 @@
 :root {
 	--green: #6e9c78;
 	--red: #c32222;
-	--orange: #fe8a33;
+	--orange: #da6f1d;
+	--orange2: #cb6b21;
+	--orange3: #b9733d;
 	--border: #444;
 	--grey: rgb(150, 150, 150);
 	--blue: #86a1cc;
 	--top-bar-height: 4rem;
+	--darkish-grey: #3d3d3d;
+	--dark-grey: #2c2c2c;
+	--black: #121212;
+	--black2: #181818;
+	--black3: #1f1f1f;
+	--sky-blue: #8df2f9;
+	--sky-blue2: #9cdcfe;
+	--test: #529cb3;
+	--pale-grey: #606060;
+	--white: #eee;
 
-	/* --nav-bg: var(--blue); */
+	--incorrect: var(--dark-grey);
+	--correct: var(--green);
+	--misplaced: var(--orange3);
+	--default: var(--test);
+	/* --default: var(--sky-blue); */
+	--app-background: var(--black3);
+	--text: var(--white);
+
+	--keyboard-key: var(--pale-grey);
+
+	--flip-duration: 350ms;
 }
 
 @media (max-width: 600px) {
@@ -16,12 +38,10 @@
 	}
 }
 
-/* c, #53a653, #4a934a, #408140, #376e37. Brand original color codes, colors palette. */
-
 .toast {
 	background: var(--orange);
 	width: 100%;
-	color: black;
+	color: var(--text);
 }
 body {
 	margin: 0;
@@ -29,6 +49,12 @@ body {
 		"Droid Sans", "Helvetica Neue", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	background-color: var(--app-background);
+	color: var(--text);
+}
+svg {
+	stroke: var(--text);
+	fill: var(--text);
 }
 
 .game-container {
@@ -36,12 +62,11 @@ body {
 	width: 375px;
 	height: 36rem;
 	margin: 4rem auto;
-	border: solid 3px tan;
 	border-radius: 1rem;
 	overflow: hidden;
 }
 
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 500px) {
 	.game-container {
 		margin: 0;
 		width: 100%;

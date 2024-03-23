@@ -1,37 +1,81 @@
+@keyframes flip {
+	0% {
+		transform: rotateY(0deg);
+	}
+	50% {
+		transform: rotateY(90deg);
+	}
+	50% {
+		transform: rotateY(-90deg);
+	}
+	100% {
+		transform: rotateY(0deg);
+	}
+}
+
+@keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
 .letter {
 	flex-basis: 0rem;
 	flex-grow: 1;
 	margin-right: 4px;
-	background: rgb(150, 150, 150);
 	/* flex-grow: ${(props) => (props.$vanish ? 0.0001 : 1)}; */
 	/* margin-right: ${(props) => (props.$vanish ? 0 : "4px")}; */
-	transition: flex-grow 300ms ease-out;
+	/* transition: flex-grow 300ms 0ms ease-out, background-color 0ms 0ms; */
+
 	/* background: ${(props) => props.$color}; */
 	text-transform: uppercase;
 	font-weight: bold;
 	max-width: 2rem;
+
 	&:after {
 		/* content: "•"; */
 	}
+	&.submitted {
+		animation-name: flip;
+		animation-timing-function: linear;
+		animation-duration: var(--flip-duration);
+		animation-iteration-count: 1;
+		animation-direction: alternate;
+		animation-fill-mode: both;
+		transition: flex-grow 300ms 0ms ease-out, background-color 0ms 00ms;
+	}
 
 	&.invisible {
-		background: white;
-		background-color: var(--white);
+		background-color: var(--app-background);
+		animation: fadeOut 300ms forwards;
+		/* transition-duration: 0ms !important;
+		transition-delay: 0ms !important;
+		animation-delay: 0ms !important;
+		animation-duration: 0ms !important; */
 	}
 	&.nonExistent {
+		transition-delay: 0ms !important; /* force overwrite the js-set value */
+		transition-duration: 300ms 0ms;
 		margin-right: 0;
 		flex-grow: 0.000001;
 	}
 	&.correct {
-		background-color: var(--green);
+		background-color: var(--correct);
 	}
 	&.misplaced {
-		background-color: var(--orange);
+		background-color: var(--misplaced);
 	}
 	&.incorrect {
-		background-color: var(--grey);
+		background-color: var(--incorrect);
 	}
 	&.default {
-		background-color: var(--grey);
+		/* background-color: var(--default); */
+		background-color: color-mix(in srgb, var(--default) 70%, transparent);
+	}
+	&.empty {
+		background-color: color-mix(in srgb, var(--default) 50%, transparent);
 	}
 }
